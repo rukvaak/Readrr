@@ -3,7 +3,9 @@ import { StyleSheet,ImageBackground,} from 'react-native';
 import { Container, Header, Content, Form, Item, Input, Button,Text, View ,CheckBox,ListItem,Body,AppLoading} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Col, Row, Grid } from "react-native-easy-grid";
-export default class  SignupScreen extends React.Component{
+import ValidationComponent from 'react-native-form-validator';
+import  ApiService from '../Services/apiservice';
+export default class  SignupScreen extends  ValidationComponent{
   static navigationOptions = {
     title: '',
     headerStyle: {
@@ -14,18 +16,50 @@ export default class  SignupScreen extends React.Component{
   };
     constructor(props){
       super(props);
-      this.state = {name:"",fullname:"",email:"",pass:"", checked:false};
+      this.state = {name:"",fullname:"",email:"",pass:"", checked:false,errorMessage:""};
+      
     }
 
     state = {
-      loading: true
+      loading: true,
+      validate:false
     }
     onePressed() {
- 
+
       this.setState({ checked: !this.state.checked });
    
   
       
+  }
+  register(){
+   var validated = this.validate({
+      name: {required: true},
+      email: {required:true,email:true},
+      pass:{required:true}
+    });
+    this.setState({validate:validated})
+    console.log(validated);
+    let user = {
+      name:this.state.name,
+      email:this.state.email,
+      password:this.state.pass
+    }
+    if(validated){
+      let api = new ApiService();
+      api.signUpUsers(user).then(result=>{
+        console.log(result.data);
+        if(result.data.message){
+          this.setState({
+            errorMessage:result.data.message
+          })
+        }
+        else{
+          this.setState({
+            errorMessage:""
+          })
+        }
+      })
+    }
   }
     async componentDidMount() {
       await Font.loadAsync({
@@ -60,27 +94,32 @@ export default class  SignupScreen extends React.Component{
 
               </View>
                   <Content style = {styles.content}>
-                      <Form style = {styles.form}>
-                          
+                      <Form style = {styles.form}> 
                           <Item last rounded style = {styles.inputfield}>
                            <Icon name="user" size ={30}/>
-                           <Input ref="name" onChangeText={(name) => this.setState({name})} value={this.state.name}  placeholder="Enter the Username"  placeholderTextColor="grey"/>
+                           <Input  ref="name" onChangeText={(name) => this.setState({"name":name})} value={this.state.name}  placeholder="Enter the Username"  placeholderTextColor="grey" value={this.state.name}/>
                           </Item>
+                          {!this.state.validate && this.isFieldInError('name') && this.getErrorsInField('name').map(errorMessage =><Text style={{textAlign:"center",flex:1,color:"red"}}>{"Please Enter Name"}</Text>) }
                           <Item last rounded style = {styles.inputfield}>
                               <Icon name = "envelope" size = {30}/>
-                              <Input ref="email" onChangeText={(email) => this.setState({email})} value={this.state.email}  placeholder="Enter the Email"  placeholderTextColor="grey" />
+                              <Input ref="email" onChangeText={(email) => this.setState({"email":email})} value={this.state.email}  placeholder="Enter the Email"  placeholderTextColor="grey"  value={this.state.email} />
                           </Item>
+                          {!this.state.validate && this.isFieldInError('email') && this.getErrorsInField('email').map(errorMessage => <Text style={{textAlign:"center",flex:1,color:"red"}}>{errorMessage.includes("mandatory")?"Please Enter Email":"Please Enter valid Email Address"}</Text>) }
                           <Item last rounded style = {styles.inputfield}>
                               <Icon name = "lock" size = {40} />
-                              <Input ref="pass" onChangeText={(pass) => this.setState({pass})} value={this.state.pass} placeholder="Enter the Passwrod"  placeholderTextColor="grey"  />
+                              <Input ref="pass" secureTextEntry={true} onChangeText={(pass) => this.setState({"pass":pass})} value={this.state.pass} placeholder="Enter the Passwrod"  placeholderTextColor="grey"   value={this.state.pass} />
                           </Item>
+                          {!this.state.validate && this.isFieldInError('pass') && this.getErrorsInField('pass').map(errorMessage => <Text style={{textAlign:"center",flex:1,color:"red"}}>{"Please Enter Password"}</Text>) }
                           <View style={{ flexDirection: 'row' ,margin:20}}>
           <CheckBox checked={this.state.checked} 
             onPress={this.onePressed.bind(this)} rounded/>
           <Text style={{textAlign:'center'}}>Please sign me up to the latest book news and exclusives</Text>
         </View>
-                        
-                          <Button style = {styles.submit}>
+        <View>
+       {<Text style={{textAlign:"center",flex:1,color:"red"}}>{this.state.errorMessage}</Text>}
+        </View>
+         
+                          <Button style = {styles.submit} onPress={this.register.bind(this)}>
                               <Text>Create Account </Text>
                           </Button>
                           <Text style = {styles.or} >Or</Text>
