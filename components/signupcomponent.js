@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet,ImageBackground,} from 'react-native';
+import { StyleSheet,ImageBackground,AsyncStorage,KeyboardAvoidingView} from 'react-native';
 import { Container, Header, Content, Form, Item, Input, Button,Text, View ,CheckBox,ListItem,Body,AppLoading} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Col, Row, Grid } from "react-native-easy-grid";
+import { Ionicons } from '@expo/vector-icons';
+import * as Font from 'expo-font';
 export default class  SignupScreen extends React.Component{
   static navigationOptions = {
     title: '',
@@ -42,6 +44,7 @@ export default class  SignupScreen extends React.Component{
         );
       }
           return(
+            
           <Container>
             <View style={{margin:3}}>
                 <Grid>
@@ -80,7 +83,7 @@ export default class  SignupScreen extends React.Component{
           <Text style={{textAlign:'center'}}>Please sign me up to the latest book news and exclusives</Text>
         </View>
                         
-                          <Button style = {styles.submit}>
+                          <Button style = {styles.submit} onPress = {this.createaccount}>
                               <Text>Create Account </Text>
                           </Button>
                           <Text style = {styles.or} >Or</Text>
@@ -93,8 +96,10 @@ export default class  SignupScreen extends React.Component{
                   </Content>
                   <Text style = {{textAlign:'center'}}>By signing in,creating an account,you agree to our Terms of use and our privacy policy</Text>
           </Container>
+          
           );
       }
+     
     }
   const styles = StyleSheet.create({
     social:{

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, Form, Item, Input, Button,Text, View ,CheckBox,ListItem,Body,AppLoading} from 'native-base';
-import {StyleSheet} from 'react-native';
+import {StyleSheet,AsyncStorage} from 'react-native';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ValidationComponent from 'react-native-form-validator';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { disableExpoCliLogging } from 'expo/build/logs/Logs';
+import axios from 'axios';
 export default class SigninScreen extends ValidationComponent{
   static navigationOptions = {
     title: '',
@@ -16,6 +17,20 @@ export default class SigninScreen extends ValidationComponent{
       borderBottomWidth: 0,
     }
   };
+  constructor(props){
+    super(props);
+    this.state = {name:"",pass:"",checked:false};
+        }
+        componentDidMount(){
+          this._loadInitialState.done();
+        }
+        _loadInitialState = async() =>{
+          var value = await AsyncStorage.getItem('users');
+          if (value !== null){
+            this.props.navigation.navigate('Login');
+          }
+        }
+        
   state = {
     loading: true
   }
@@ -29,10 +44,6 @@ export default class SigninScreen extends ValidationComponent{
     this.setState({ loading: false })
   }
       
-    constructor(props){
-super(props);
-this.state = {name:"",pass:"",checked:false};
-    }
 
 _onPressButton() {
 this.validate({
@@ -90,7 +101,7 @@ onePressed() {
           <Text>Remember me</Text>
         </View>
           
-                <Button  style = {styles.submit} onPress={this.validate} ><Text>SIGN in & continue</Text></Button>
+                <Button  style = {styles.submit} onPress={this.submission} ><Text>SIGN in & continue</Text></Button>
               </Form>
               <Text style = {styles.or}>OR</Text>
 
@@ -103,6 +114,30 @@ onePressed() {
             <Text style = {{textAlign:'center'}}>by signing in,creating an account,you agree to our Terms of use and our privacy policy</Text>
           </Container>
         );
+    }
+    submission = ()=>{
+      fetch('http://localhost:3002/users',{
+      method:'POST',
+      headers:{
+      'Accept':'application/json',
+      "Content-Type":'application/json'
+      },
+      body:JSON.stringify({
+        username:this.state.name,
+        password:this.state.pass,
+      })
+      })
+      .then((Response)=>Response.json())
+      .then((res )=>{
+        if(res.success === true){
+          AsyncStorage.setItem('users',res.users);
+          this.props.navigation.navigate('Signin');
+        }
+        else {
+          alert(res.message);
+        }
+      })
+      .done();
     }
 }
 
