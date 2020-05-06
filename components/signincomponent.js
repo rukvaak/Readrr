@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, Form, Item, Input, Button,Text, View ,CheckBox,ListItem,Body,AppLoading} from 'native-base';
-import {StyleSheet,AsyncStorage} from 'react-native';
+import {StyleSheet,AsyncStorage,ToastAndroid} from 'react-native';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ValidationComponent from 'react-native-form-validator';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { disableExpoCliLogging } from 'expo/build/logs/Logs';
+import  ApiService from '../Services/apiservice';
 import axios from 'axios';
 export default class SigninScreen extends ValidationComponent{
   static navigationOptions = {
@@ -21,18 +22,18 @@ export default class SigninScreen extends ValidationComponent{
     super(props);
     this.state = {name:"",pass:"",checked:false};
         }
-        componentDidMount(){
-          this._loadInitialState.done();
-        }
-        _loadInitialState = async() =>{
-          var value = await AsyncStorage.getItem('users');
-          if (value !== null){
-            this.props.navigation.navigate('Login');
-          }
-        }
-        
+
   state = {
     loading: true
+  }
+  componentDidMount(){
+    this._loadInitialState.done();
+  }
+  _loadInitialState = async() =>{
+    var value = await AsyncStorage.getItem('user');
+    if (value !== null){
+      this.props.navigation.navigate('Language');
+    }
   }
 
   async componentDidMount() {
@@ -58,9 +59,45 @@ onePressed() {
  
 
     
+} 
+loginto(){
+  var validated = this.validate({
+     name: {required: true},
+     pass:{required:true}
+   });
+   this.setState({validate:validated})
+   console.log(validated);
+   let user = {
+     name:this.state.name,
+     password:this.state.pass
+   }
+   if(validated){
+    fetch('http://192.168.225.238:3002/users',{
+    method:'POST',
+    headers:{
+    "Content-Type":'application/json'
+    },
+    body:({ 
+      name:this.state.name,
+      pass:this.state.pass,
+    })
+    })
+    .then((Response)=>Response.json())
+    .then((result )=>{
+      if(result.success === true){
+        AsyncStorage.setItem('users',result.users);
+        this.navigation.navigate('Language');
+      }
+      else {
+        alert(result.data.message);
+      }
+    })
+    .done();
+  
+     
+   }
 }
-    
-    render(){
+ render(){
       if (this.state.loading) {
         return (
           <View></View>
@@ -89,19 +126,20 @@ onePressed() {
                 <Input ref="name" onChangeText={(name) => this.setState({name})} value={this.state.name} placeholder="Enter the Username"  placeholderTextColor="grey"/>
                   
                 </Item>
+                {!this.state.validate && this.isFieldInError('name') && this.getErrorsInField('name').map(errorMessage =><Text style={{textAlign:"center",flex:1,color:"red"}}>{"Please Enter The Name"}</Text>) }
                 <Item last rounded style = {styles.pass}>
                 <Icon name="lock" size={30} color="#900" />
                   <Input ref="pass" onChangeText={(pass) => this.setState({pass})} value={this.state.pass}   placeholder="Enter the Password"  placeholderTextColor="grey" />
                 </Item>
-                
+                {!this.state.validate && this.isFieldInError('pass') && this.getErrorsInField('pass').map(errorMessage => <Text style={{textAlign:"center",flex:1,color:"red"}}>{"Please Enter The Password"}</Text>) }
                 <View style={{ flexDirection: 'row' ,margin:20}}>
           <CheckBox checked={this.state.checked} 
             style={{ marginRight: 20 }}
             onPress={this.onePressed.bind(this)} rounded/>
           <Text>Remember me</Text>
         </View>
-          
-                <Button  style = {styles.submit} onPress={this.submission} ><Text>SIGN in & continue</Text></Button>
+        {<Text style={{textAlign:"center",flex:1,color:"red"}}>{this.state.errorMessage}</Text>}
+                <Button  style = {styles.submit} onPress={this.loginto.bind(this)} ><Text>SIGN in & continue</Text></Button>
               </Form>
               <Text style = {styles.or}>OR</Text>
 
@@ -115,30 +153,7 @@ onePressed() {
           </Container>
         );
     }
-    submission = ()=>{
-      fetch('http://localhost:3002/users',{
-      method:'POST',
-      headers:{
-      'Accept':'application/json',
-      "Content-Type":'application/json'
-      },
-      body:JSON.stringify({
-        username:this.state.name,
-        password:this.state.pass,
-      })
-      })
-      .then((Response)=>Response.json())
-      .then((res )=>{
-        if(res.success === true){
-          AsyncStorage.setItem('users',res.users);
-          this.props.navigation.navigate('Signin');
-        }
-        else {
-          alert(res.message);
-        }
-      })
-      .done();
-    }
+
 }
 
 const styles = StyleSheet.create({
