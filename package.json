@@ -27,7 +27,8 @@
     "react-native-webview": "^9.4.0",
     "react-navigation": "^4.3.8",
     "react-navigation-stack": "^2.3.13",
-    "tcomb-form-native": "^0.6.20"
+    "tcomb-form-native": "^0.6.20",
+    "expo-linear-gradient": "~8.1.0"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.1.0",
