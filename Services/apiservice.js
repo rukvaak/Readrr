@@ -8,7 +8,7 @@ export default class ApiService extends React.Component {
 
   }
 
-   URL ="http://192.168.0.105:3002/";
+   URL ="http://192.168.225.238:3002/";
 
   signUpUsers(user){
       var config = {
@@ -20,7 +20,5 @@ export default class ApiService extends React.Component {
      
       return axios.post(this.URL+"users",user,config);
   }
-
-  
 
 }

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet,ImageBackground,} from 'react-native';
+import { StyleSheet,ImageBackground,AsyncStorage,KeyboardAvoidingView,ToastAndroid} from 'react-native';
 import { Container, Header, Content, Form, Item, Input, Button,Text, View ,CheckBox,ListItem,Body,AppLoading} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Col, Row, Grid } from "react-native-easy-grid";
+import * as Font from 'expo-font';
+import { Ionicons } from '@expo/vector-icons';
 import ValidationComponent from 'react-native-form-validator';
 import  ApiService from '../Services/apiservice';
 export default class  SignupScreen extends  ValidationComponent{
@@ -48,6 +50,7 @@ export default class  SignupScreen extends  ValidationComponent{
       let api = new ApiService();
       api.signUpUsers(user).then(result=>{
         console.log(result.data);
+        ToastAndroid.show("open login page to use your credentials", ToastAndroid.SHORT);
         if(result.data.message){
           this.setState({
             errorMessage:result.data.message
@@ -76,6 +79,7 @@ export default class  SignupScreen extends  ValidationComponent{
         );
       }
           return(
+            
           <Container>
             <View style={{margin:3}}>
                 <Grid>
@@ -132,8 +136,10 @@ export default class  SignupScreen extends  ValidationComponent{
                   </Content>
                   <Text style = {{textAlign:'center'}}>By signing in,creating an account,you agree to our Terms of use and our privacy policy</Text>
           </Container>
+          
           );
       }
+     
     }
   const styles = StyleSheet.create({
     social:{
