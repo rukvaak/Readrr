@@ -7,17 +7,21 @@ import SigninScreen from './components/signincomponent';
 import FormExample from './components/signincomponent';
 import SignupScreen from './components/signupcomponent';
 import LanguageScreen from './components/langcomponent';
+import CategoriesScreen from './components/category';
 const navigator = createStackNavigator(
   {
    Login:LoginScreen,
    Signin:SigninScreen,
    Signup:SignupScreen,
-   Language:LanguageScreen
+   Language:LanguageScreen,
+   Category:CategoriesScreen,
   },
   {
-    initialRouteName: 'Language',
+    initialRouteName: 'Category',
   }
 );
 
 const AppContainer = createAppContainer(navigator);
 export default AppContainer;
+
+
