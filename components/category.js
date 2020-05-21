@@ -3,73 +3,85 @@ import {
   Text, 
   View,
   ImageBackground,
-  SafeAreaView,StyleSheet } from 'react-native';
+  SafeAreaView,StyleSheet,Dimensions } from 'react-native';
 import * as Font from 'expo-font'
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, FlatList, ScrollView } from 'react-native-gesture-handler';
 import {Grid,Col,Row} from 'react-native-easy-grid';
+import MultiSelect from 'react-native-multiple-select';
+const data = [
+    {
+       bgimage:'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Faboutreact.com%2Fwp-content%2Fuploads%2F2018%2F09%2Freact_native_grid_image_gallery.png&f=1&nofb=1',
+       catnames:'Arts and photography',
+       key:'1',
+    },
+    {
+        bgimage:'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Faboutreact.com%2Fwp-content%2Fuploads%2F2018%2F09%2Freact_native_grid_image_gallery.png&f=1&nofb=1',
+        catnames:'Biography and memory',
+        key:'2',
+    },
+    {
+        bgimage:'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Faboutreact.com%2Fwp-content%2Fuploads%2F2018%2F09%2Freact_native_grid_image_gallery.png&f=1&nofb=1',
+        catnames:'Buisness and money',
+        key:'3',
+    },
+    {
+        bgimage:'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Faboutreact.com%2Fwp-content%2Fuploads%2F2018%2F09%2Freact_native_grid_image_gallery.png&f=1&nofb=1',
+        catnames:'Computer and Tech',
+        key:'4',
+    },
+    {
+        bgimage:'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Faboutreact.com%2Fwp-content%2Fuploads%2F2018%2F09%2Freact_native_grid_image_gallery.png&f=1&nofb=1',
+        catnames:'Comics and graphics',
+        key:'5',
+    },
+    {
+        bgimage:'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Faboutreact.com%2Fwp-content%2Fuploads%2F2018%2F09%2Freact_native_grid_image_gallery.png&f=1&nofb=1',
+        catnames:'Stories and novels',
+        key:'6',
+    }
+];
 export default class CategoriesScreen extends Component{
-  constructor(props){
-    super(props);
-  }
-  render(){
-    return(
-<View style = {styles.screen}>
+  _renderItem (data){
+    return([
+      <Row style = {styles.row}>
+      <ImageBackground source={{uri:data.bgimage}} style = {styles.background}>
+      <Text style = {styles.catname} > {data.catnames} </Text>
+      </ImageBackground>
+      </Row>  
 
-<Text style = {styles.header} >Choose Your Interest</Text>
-<Grid>
-<Col>
-<Row style = {styles.row1}>
-  <ImageBackground source={require('../assets/arts.jpg')} style = {styles.background}>
-<Text style = {styles.catname} id = {1} items="arrayofitems">Arts and photography</Text>
-</ImageBackground>
-</Row>
-<Row style = {styles.row2}> 
-<ImageBackground source={require('../assets/biography.jpg')} style = {styles.background}>
-<Text style = {styles.catname}id = {2} items="arrayofitems">Biography and memory</Text>
-</ImageBackground>
-  </Row>  
-  <Row style = {styles.row3}>
-  <ImageBackground source={require('../assets/buisness.jpg')} style = {styles.background}>
-  <Text style = {styles.catname}id = {3} items="arrayofitems">Buisness and money</Text>
-  </ImageBackground>
-  </Row>
-</Col>
-<Col>
-<Row style = {styles.row4}>
-<ImageBackground source={require('../assets/computer.jpg')} style = {styles.background}>
-<Text style = {styles.catname}id = {4} items="arrayofitems">Computer and Tech</Text>
-</ImageBackground>
-</Row>
-<Row style ={styles.row5}> 
-<ImageBackground source={require('../assets/comics.jpg')} style = {styles.background}>
-<Text style = {styles.catname}id = {5} items="arrayofitems">Comics and graphics</Text>
-</ImageBackground>
-</Row>
-<Row style = {styles.row6}>
-<ImageBackground source={require('../assets/children.jpg')} style = {styles.background}>
-<Text style = {styles.catname}id = {6} items="arrayofitems">Childrens play</Text>
-</ImageBackground>
-</Row>
-</Col>
-  </Grid>
+    ]);
+    };
+
+
+    render(){
+        return(
+          <View>
+            <Text style = {styles.header} >Choose Your Interest</Text>
+    <FlatList 
+    data = {data}
+    key={data.key}
+    numColumns= {2}
+    renderItem={({item}) =>(
+this._renderItem(item)
+    )}
+    />
 </View>
-    );
-  }
+        );
+};
 }
 
 
 
+
+
+
 const styles = StyleSheet.create({
-  header:{
-    fontSize:25,
-  textAlign:'center',
-    margin:'5%',
-    fontWeight:'400',
-    backgroundColor:'#2aa0ea'
-  },
   screen:{
     flex:1,
+    width:"100%",
+    height:"100%",
+    marginHorizontal:8,
   },
   catname:{
     fontSize:17,
@@ -78,46 +90,25 @@ const styles = StyleSheet.create({
     fontWeight:'200',
     backgroundColor:'#4e2269'
   },
-  row1:{
-    backgroundColor:'#1dc190',
-    borderRadius:10,
-    margin:10,
-   justifyContent:'center'
-  },
-  row2:{
-    backgroundColor:'blue',
-    borderRadius:10,
-    margin:10,
-    justifyContent:'center'
-  },
-  row3:{
-    backgroundColor:'#4e2269',
-    borderRadius:10,
-    margin:10,
-    justifyContent:'center'
-  },
-  row4:{
-    backgroundColor:'#ea7a2a',
-    borderRadius:10,
-    margin:10,
-    justifyContent:'center'
-  },
-  row5:{
-    backgroundColor:'#2aa0ea',
-    borderRadius:10,
-    margin:10,
-    justifyContent:'center'
-  },
-  row6:{
-    backgroundColor:'#fc0547',
-    borderRadius:10,
-    margin:10,
-    justifyContent:'center'
-  },
   background:{
   width:"100%",
   height:"100%",
+
+  
+  },
+  row:{
+    backgroundColor:'#1dc192',
+    borderRadius:10,
+    margin:10,
+   justifyContent:'center',
+  },
+  header:{
+    fontSize:25,
   textAlign:'center',
-  }
+    margin:'5%',
+    fontWeight:'400',
+    backgroundColor:'#2aa0ea'
+  },
+
     });
 
