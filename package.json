@@ -16,6 +16,8 @@
     "axios": "^0.19.2",
     "expo": "~37.0.3",
     "expo-font": "^8.1.1",
+    "expo-linear-gradient": "~8.1.0",
+    "expo-secure-store": "^8.1.0",
     "native-base": "^2.13.12",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
@@ -38,6 +40,9 @@
     "react-native-webview": "^9.4.0",
     "react-navigation": "^4.3.8",
     "react-navigation-stack": "^2.3.13",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "tcomb-form-native": "^0.6.20"
   },
   "devDependencies": {

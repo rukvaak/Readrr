@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet,View,ImageBackground,} from 'react-native';
+import { StyleSheet,View,ImageBackground,Platform} from 'react-native';
 import * as Font from 'expo-font'
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {Button,Text,Container} from 'native-base';
-
+import { LinearGradient } from 'expo-linear-gradient';
 export default class  LoginScreen extends React.Component{
   static navigationOptions = ({ navigation }) => {
     return {
@@ -34,14 +34,19 @@ export default class  LoginScreen extends React.Component{
       );
     }
         return(
+         
+      
             <View style={styles.screen}> 
+ <LinearGradient
+          colors={['#0037A5', '#720B98', '#192f6a']}
+          style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
               <ImageBackground source={require('../assets/sign-page.png')} style={styles.background} imageStyle={{
-      resizeMode: 'stretch' // works only here!
+      resizeMode: 'contain' // works only here!
     }}>
                 <View style={{flex:0.85}}>
 
                 </View>
-              <Container style ={styles.buttons}>
+              <View style ={styles.buttons}>
         <Button style ={ styles.signbuttons} onPress={()=>this.props.navigation.navigate('Signin') }>
           <Text>
             Sign in
@@ -52,15 +57,13 @@ export default class  LoginScreen extends React.Component{
             Sign up
           </Text>
         </Button>
-      </Container>
+      </View>
       <View style={{flex:0.1}}>
-
-</View>
-    
-      
+      </View>
                    </ImageBackground>
-                  
+                  </LinearGradient>
             </View>
+         
         );
     }
   }
@@ -76,7 +79,7 @@ background:{
     
   width: '100%', // applied to Image
   height: '100%' ,
-  backgroundColor:"#fff"
+  paddingTop: Platform.OS === 'ios' ? 60 : 0,
 },
 buttons:{
     flex:.2,

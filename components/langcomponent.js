@@ -5,8 +5,17 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 import { Ionicons } from '@expo/vector-icons';
 import { Container, Header, Content, Item, Input, Button,Text, View ,CheckBox,ListItem,Body,AppLoading} from 'native-base';
 export default class  LanguageScreen extends React.Component{
+  static navigationOptions = {
+    title: '',
+    headerStyle: {
+      elevation: 0,
+      shadowOpacity: 0,
+      borderBottomWidth: 0,
+    }
+  }
     constructor(props){
-      super(props);     
+      super(props);   
+      this.renderCategories = this.renderCategories.bind(this);  
     }
     state = {
       loading: true
@@ -19,20 +28,24 @@ export default class  LanguageScreen extends React.Component{
       })
       this.setState({ loading: false })
     }
-       
+    renderCategories(){
+      this.props.navigation.navigate('Categories');
+    }
     render(){
       if (this.state.loading) {
         return (
           <View></View>
         );
       }
+
+      
           return(
               <View style={styles.screen}>
                      <ImageBackground source={require('../assets/lang.png')} style={styles.background}/>
                          <Text style = {styles.select}>Please Choose your language</Text>
                       <Grid style= {{flex:0.80}}>
-                        <Col>
-                     <Button style = {styles.opt}><Text>English</Text></Button>
+                        <Col >
+                     <Button style = {styles.opt}onPress={this.renderCategories}><Text>English</Text></Button>
                      <Button style = {styles.opt}><Text>Hindi</Text></Button>
                      </Col>
                      <Col>
@@ -49,7 +62,7 @@ export default class  LanguageScreen extends React.Component{
     const styles = StyleSheet.create({
         screen: {
         flex:1,
-    
+        backgroundColor:'#ffff'
         },
         background:{
             width:'100%',
@@ -58,9 +71,11 @@ export default class  LanguageScreen extends React.Component{
         },
         select:{
           color:"black",
-          fontSize:30,
-          fontWeight:'700',
-          justifyContent:'center'
+          fontSize:20,
+          fontWeight:'500',
+          textAlign:'center',
+          margin:20
+          
 
         },
         opt:{
@@ -70,5 +85,6 @@ export default class  LanguageScreen extends React.Component{
              marginLeft:"12%",
              borderRadius:24,
              marginTop:"3%",
+             margin:20
             },
 });

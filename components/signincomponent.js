@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, Form, Item, Input, Button,Text, View ,CheckBox,ListItem,Body,AppLoading} from 'native-base';
+            import { Container, Header, Content, Form, Item, Input, Button,Text, View ,CheckBox,ListItem,Body,AppLoading,Left,Title,Right} from 'native-base';
 import {StyleSheet,AsyncStorage,ToastAndroid} from 'react-native';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,8 +8,16 @@ import ValidationComponent from 'react-native-form-validator';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { disableExpoCliLogging } from 'expo/build/logs/Logs';
 import  ApiService from '../Services/apiservice';
+import * as SecureStore from 'expo-secure-store';
+import { connect } from 'react-redux';
 import axios from 'axios';
-export default class SigninScreen extends ValidationComponent{
+import LoginScreen from './logincomponent';
+import {postRequest} from '../Services/data-service'
+
+import { Directions } from 'react-native-gesture-handler';
+let actionPayload;
+let token;
+ class SigninScreen extends ValidationComponent{
   static navigationOptions = {
     title: '',
     headerStyle: {
@@ -20,9 +28,9 @@ export default class SigninScreen extends ValidationComponent{
   };
   constructor(props){
     super(props);
-    this.state = {name:"",pass:"",checked:false};
+    this.state = {name:"pavan2322@gmail.com",pass:"boson23232",checked:false};
         }
-
+         
   state = {
     loading: true
   }
@@ -30,10 +38,10 @@ export default class SigninScreen extends ValidationComponent{
     this._loadInitialState.done();
   }
   _loadInitialState = async() =>{
-    var value = await AsyncStorage.getItem('user');
-    if (value !== null){
-      this.props.navigation.navigate('Language');
-    }
+    // var value = await AsyncStorage.getItem('user');
+    // if (value !== null){
+    //   this.props.navigation.navigate('Language');
+    // }
   }
 
   async componentDidMount() {
@@ -45,7 +53,27 @@ export default class SigninScreen extends ValidationComponent{
     this.setState({ loading: false })
   }
       
-
+	componentWillReceiveProps(nextProps) {
+    console.log("next"+ JSON.stringify(nextProps))
+		
+     // take action here based on nextProps; 
+     if(nextProps.data){
+      console.log(nextProps.data.match)
+      if(nextProps.data.match!=undefined && nextProps.data.match){
+        console.log(nextProps["data"])
+        token = nextProps["data"]["token"];
+        this.props.onTokenRecieved();
+        this.props.navigation.navigate('Language');
+      
+     }
+    
+     
+      
+     } 
+      
+     
+		
+  }
 _onPressButton() {
 this.validate({
     name: {minlength:3, maxlength:7, required: true},
@@ -53,48 +81,28 @@ this.validate({
   });
 }
 
-onePressed() {
- 
+onePressed() { 
     this.setState({ checked: !this.state.checked });
- 
-
     
 } 
 loginto(){
   var validated = this.validate({
-     name: {required: true},
+     email: {required: true,email:true},
      pass:{required:true}
    });
    this.setState({validate:validated})
-   console.log(validated);
+ 
    let user = {
-     name:this.state.name,
+     user:this.state.name,
      password:this.state.pass
    }
    if(validated){
-    fetch('http://192.168.225.238:3002/users',{
-    method:'POST',
-    headers:{
-    "Content-Type":'application/json'
-    },
-    body:({ 
-      name:this.state.name,
-      pass:this.state.pass,
-    })
-    })
-    .then((Response)=>Response.json())
-    .then((result )=>{
-      if(result.success === true){
-        AsyncStorage.setItem('users',result.users);
-        this.navigation.navigate('Language');
-      }
-      else {
-        alert(result.data.message);
-      }
-    })
-    .done();
-  
-     
+    actionPayload={
+    route:'users/validate',
+    data : user
+   }
+   this.props.onRequestUpdate();
+
    }
 }
  render(){
@@ -103,10 +111,9 @@ loginto(){
           <View></View>
         );
       }
-        return(
-        
+        return([
             <Container>
-              <View style={{margin:3}}>
+              <View >
                 <Grid>
                   <Col size={1}>
                   </Col>
@@ -123,13 +130,13 @@ loginto(){
               <Form style = {styles.form}>
                 <Item last rounded style = {styles.user}>
                     <Icon name="user" size={30} color="black" />
-                <Input ref="name" onChangeText={(name) => this.setState({name})} value={this.state.name} placeholder="Enter the Username"  placeholderTextColor="grey"/>
+                <Input ref="email" onChangeText={(name) => this.setState({name})} value={this.state.name} placeholder="Enter the Username"  placeholderTextColor="grey"/>
                   
                 </Item>
                 {!this.state.validate && this.isFieldInError('name') && this.getErrorsInField('name').map(errorMessage =><Text style={{textAlign:"center",flex:1,color:"red"}}>{"Please Enter The Name"}</Text>) }
                 <Item last rounded style = {styles.pass}>
                 <Icon name="lock" size={30} color="#900" />
-                  <Input ref="pass" onChangeText={(pass) => this.setState({pass})} value={this.state.pass}   placeholder="Enter the Password"  placeholderTextColor="grey" />
+                  <Input ref="pass" onChangeText={(pass) => this.setState({pass})}  value={this.state.pass}   placeholder="Enter the Password"  placeholderTextColor="grey" />
                 </Item>
                 {!this.state.validate && this.isFieldInError('pass') && this.getErrorsInField('pass').map(errorMessage => <Text style={{textAlign:"center",flex:1,color:"red"}}>{"Please Enter The Password"}</Text>) }
                 <View style={{ flexDirection: 'row' ,margin:20}}>
@@ -150,7 +157,10 @@ loginto(){
               </View>
             </Content>
             <Text style = {{textAlign:'center'}}>by signing in,creating an account,you agree to our Terms of use and our privacy policy</Text>
-          </Container>
+          </Container>,
+       
+        ]
+          
         );
     }
 
@@ -213,3 +223,23 @@ social:{
 
 
 });
+const mapStateToProps = (state, props) => {
+	return {
+		store :state.store,
+		loading: true,
+    data:state.items,
+    token:state.token
+	}
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+    onRequestUpdate: () => dispatch(postRequest(actionPayload)),
+    onTokenRecieved:()=>dispatch({type:'TOKEN',value:token})
+    };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+) (SigninScreen);
