@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
-import { Card,CardItem} from 'native-base';
-import {StyleSheet,AsyncStorage,ToastAndroid,FlatList,ImageBackground,View,Text} from 'react-native';
+import { Card,CardItem, Button} from 'native-base';
+import {StyleSheet,AsyncStorage,ToastAndroid, TouchableOpacity, FlatList,ImageBackground,View,Text} from 'react-native';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -83,14 +83,21 @@ let actionPayload;
     render(){
 
         return(
-            <FlatList 
-            numColumns={2}                  // set number of columns 
-            columnWrapperStyle={style.row}  // space them out evenly
-            
-            data={this.state.categories}
-            keyExtractor={(item, index) => item._id }
-            renderItem={this.renderItem }
-        />
+            <View style={{flex:1, flexDirection: 'column'}}>
+                <View style={{flex:1}}>
+                    <FlatList 
+                        numColumns={2}                  // set number of columns 
+                        columnWrapperStyle={style.row}  // space them out evenly
+                        
+                        data={this.state.categories}
+                        keyExtractor={(item, index) => item._id }
+                        renderItem={this.renderItem }
+                    />
+                </View>
+                <View style={{marginHorizontal: 50, borderRadius: 100}}>
+                <Button style = {style.button}onPress={this.renderCategories}><Text style={{fontWeight:'bold', color: '#ffffff', textAlign: 'center'}}>SUBMIT</Text></Button>
+                </View>
+            </View>
         )
 
     }
@@ -98,7 +105,6 @@ let actionPayload;
 }
 const style = StyleSheet.create({
     row: {
-        flex: 1,
         justifyContent: "space-around"
     },
     innerText:{
@@ -110,6 +116,15 @@ const style = StyleSheet.create({
          backgroundColor:'rgba(52, 52, 52, 0.5)',
      
       },
+      button: {
+        justifyContent:'center',
+        backgroundColor:'#7b0682',
+        width:"70%",
+        marginLeft:"12%",
+        borderRadius:24,
+        marginTop:"3%",
+        margin:20
+     },
 })
 
 const mapStateToProps = (state, props) => {

@@ -16,6 +16,7 @@ import {createStore,applyMiddleware, compose}  from 'redux';
 import  ImageRating  from './components/Common/ImageRating';
 import Homepage from './components/homepage';
 import Main from './components/Main';
+import Webview from './components/Webview';
 
 import   reducer    from './Services/Reducer/reducer'
 import dataService from './Services/data-service'
@@ -33,6 +34,7 @@ const navigator = createStackNavigator(
    Categories:CategoriesPage,
    Homepage:Homepage,
    LibraryPage:LibraryPage,
+   Webview:Webview,
    Main:{
           screen: Main,
           navigationOptions: { 
@@ -63,7 +65,7 @@ const navigator = createStackNavigator(
         }
   },
   {
-    initialRouteName: 'Main'
+    initialRouteName: 'Webview'
   }
 );
 
