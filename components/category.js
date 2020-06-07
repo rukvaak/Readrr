@@ -17,7 +17,7 @@ export default class CategoriesScreen extends Component{
     return(
 <View style = {styles.screen}>
 
-<Text style = {styles.header} >Choose Your Interest Please!!</Text>
+<Text style = {styles.header} >Choose Your Interest</Text>
 <Grid>
 <Col>
 <Row style = {styles.row1}>
