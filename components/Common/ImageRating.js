@@ -5,6 +5,26 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import {Button,Text} from 'native-base';
 
+import { StackActions, NavigationActions } from 'react-navigation';
+/* const resetAction = StackActions.reset({
+     index: 1, 
+     key: null,
+     actions: [
+          NavigationActions.navigate({ routeName: 'Blogpage' })
+     ],
+}); */
+
+
+const resetAction = StackActions.reset({
+  index: 0,
+  key: null,
+  actions: [NavigationActions.navigate({ routeName: 'Homepage' })]
+});
+const goToBlogpage = NavigationActions.navigate({
+  routeName: 'Blogpage'
+});
+
+
 const { width: screenWidth } = Dimensions.get('window');
 
 const Data=[
@@ -36,6 +56,7 @@ class ImageRating extends React.Component{
 }
   constructor(props){
     super(props);
+    this.rendernavigation = this.rendernavigation.bind(this);
   }
   
   state = {
@@ -54,6 +75,13 @@ class ImageRating extends React.Component{
       ...Ionicons.font,
     })
     this.setState({ loading: false })
+  }
+
+  rendernavigation(){
+    /* this.props.props.navigation.dispatch(resetAction); */
+    /* this.props.props.navigation.navigate('Rootstack', { screen: 'Blogpage' }); */
+    /* this.props.props.navigation.dispatch(goToBlogpage); */
+    this.props.props.navigation.navigate('Blogpage');
   }
 
   render(){
@@ -84,26 +112,31 @@ class ImageRating extends React.Component{
                 showsHorizontalScrollIndicator={false}
                 data={Data}
                 renderItem={({item})=>
-                    <View style={styles.item}>
-                      <Image style={styles.image} containerStyle={styles.imageContainer} source={item.image}/> 
-                      <Text style={styles.title}>
-                      {item.title } 
-                      {/* {this.state.data.title} */}
-                      </Text>
-                      <Text style={styles.subtitle}>
-                      {"By "+item.Author } 
-                      {/* {this.state.data.title} */}
-                      </Text>
-                      <Rating
-                        type='custom'
-                        ratingCount={5}
-                        imageSize={20}
-                        ratingBackgroundColor='#5abd8c'
-                        ratingColor='#5abd8c'
-                        onFinishRating={this.ratingCompleted}
-                        style={{ justifyContent: 'flex-start',   justifyContent: 'center', alignSelf: 'center' }}
-                      />
-                    </View>       
+                      <TouchableOpacity
+                        activeOpacity={0.5}
+                        onPress={this.rendernavigation}
+                      >
+                        <View style={styles.item}>
+                          <Image style={styles.image} containerStyle={styles.imageContainer} source={item.image}/> 
+                          <Text style={styles.title}>
+                          {item.title } 
+                          {/* {this.state.data.title} */}
+                          </Text>
+                          <Text style={styles.subtitle}>
+                          {"By "+item.Author } 
+                          {/* {this.state.data.title} */}
+                          </Text>
+                          <Rating
+                            type='custom'
+                            ratingCount={5}
+                            imageSize={20}
+                            ratingBackgroundColor='#5abd8c'
+                            ratingColor='#5abd8c'
+                            onFinishRating={this.ratingCompleted}
+                            style={{ justifyContent: 'flex-start',   justifyContent: 'center', alignSelf: 'center' }}
+                          />
+                        </View>  
+                    </TouchableOpacity>     
                 }
               />
 

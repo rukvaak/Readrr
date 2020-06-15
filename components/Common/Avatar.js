@@ -7,29 +7,6 @@ import {Text} from 'native-base';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const Data=[
-  {
-    id:"1",
-    image:require('../../assets/MichaelRosen.jpg'),
-    Author: "Michael Rosen"
-  },
-  {
-    id:"2",
-    image:require('../../assets/MarcusBerkmann.jpg'),
-    Author: "Marcus Berkmann"
-  },
-  {
-    id:"3",
-    image:require('../../assets/DeliaOwens.jpg'),
-    Author: "Delia Owens"
-  },
-  {
-    id:"4",
-    image:require('../../assets/StassiSchroeder.jpg'),
-    Author: "Stassi Schroeder"
-  }
-]
-
 class AvatarComponent  extends React.Component{
   static navigationOptions = ({ navigation }) => {
     return {
@@ -41,7 +18,7 @@ class AvatarComponent  extends React.Component{
   }
   
   state = {
-    data: {},
+    data: this.props.data,
     loading: true
   }
 
@@ -68,9 +45,6 @@ class AvatarComponent  extends React.Component{
             <View style={styles.screen}>
               <View style={{flex: 1, flexDirection: 'row'}}>
                 <View style={{flex: 1}}>
-                  <Text style={styles.TextBold}>Follow Authors</Text>
-                </View>
-                <View style={{flex: 1}}>
                   <TouchableOpacity
                     style={styles.ButtonStyle1}
                     activeOpacity={0.5}
@@ -84,7 +58,7 @@ class AvatarComponent  extends React.Component{
                 horizontal
                 pagingEnabled={true}
                 showsHorizontalScrollIndicator={false}
-                data={Data}
+                data={this.state.data}
                 renderItem={({item})=>
                       <Card style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
                         <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', width: 100}}>

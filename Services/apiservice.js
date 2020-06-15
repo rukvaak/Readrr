@@ -8,7 +8,7 @@ export default class ApiService extends React.Component {
 
   }
 
-   URL ="http://192.168.225.238:3002/";
+   URL ="http://192.168.1.149:3002/";
 
   signUpUsers(user){
       var config = {

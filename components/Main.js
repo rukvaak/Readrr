@@ -1,22 +1,22 @@
 import React, {Component}  from 'react';
-import { Dimensions, Text, View } from 'react-native';
+import { Dimensions, Text, View, Image } from 'react-native';
+import {Button,Container, Content, Header, Left, Body, Right, Title,Footer, FooterTab } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Icon } from 'react-native-elements';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
-import * as Font from 'expo-font'
+import * as Font from 'expo-font';
 
-/* import {Container, Content, Text, Icon } from 'native-base'; */
 
 import Homepage from './homepage';
 import LibraryPage from './Library';
 import Profile from './Common/profilepage';
-import HomeTab from '../components/Tabs/HomeTab';
-import LibraryTab from '../components/Tabs/LibraryTab';
-import FeedTab from '../components/Tabs/FeedTab';
-import ChatTab from '../components/Tabs/ChatTab';
-import MyProfileTab from '../components/Tabs/MyProfileTab';
+import HomeTab from '../components/Homestack/HomeTab';
+import LibraryTab from '../components/Homestack/LibraryTab';
+import FeedTab from '../components/Homestack/FeedTab';
+import ChatTab from '../components/Homestack/ChatTab';
+import MyProfileTab from '../components/Homestack/MyProfileTab';
 import { HeaderTitle } from 'react-navigation-stack';
 
 
@@ -27,9 +27,32 @@ const Tab = createMaterialTopTabNavigator();
 
 export default class  Main extends React.Component{
   static navigationOptions = ({ navigation }) => {
-    /* return {
-      header: () => null
-   }  */
+    return {
+      headerTitle:(  <View style={{flexDirection: 'row'}}>
+                                    <Text style={{color: '#ffffff', fontSize: 26, fontWeight: 'bold', paddingLeft: 10}}>
+                                      Readrr
+                                    </Text>
+                                  </View>
+                  ),
+                    headerStyle:  {backgroundColor: '#f7931e'},
+                    headerLeft:(   <View style={{flexDirection: 'row'}}>
+                                    <Button transparent vertical active={true} onPress={() => this.props.navigation.navigate('Main')}>
+                                      <Image
+                                          source={require('../assets/Readrr-logo.png')}
+                                          style={{ width: screenWidth -320, height: screenWidth - 320}}
+                                      />
+                                    </Button>
+                                  </View>),
+                    headerRight:(  <View style={{flexDirection: 'row', marginHorizontal: 20}}>
+                                    <Button transparent onPress={() => alert("You pressed Notificaton button")}>
+                                      <Icon name='notifications'  color='#ffffff' size={30}/>
+                                    </Button>
+                                    <Button transparent onPress={() => alert("You pressed search button")} style={{paddingLeft: 20}}>
+                                      <Icon name='search'  color='#ffffff' size={30}/>
+                                    </Button>
+                                  </View>)
+      /* header: () => null */
+   } 
 }
   constructor(props){
     super(props);
@@ -62,12 +85,12 @@ export default class  Main extends React.Component{
     }
     
         return(
-            <NavigationContainer> 
               <Tab.Navigator
-                initialRouteName="Feed"
+                initialRouteName="Library"
                 tabBarPosition='bottom'
                 lazy={true}
                 swipeEnabled={true}
+                backBehavior='none'
                 tabBarVisible={true}
                 tabBarOptions={{
                   labelStyle: { fontSize: getAdjustedFontSize(12) },
@@ -139,7 +162,6 @@ export default class  Main extends React.Component{
                   }}
                 />
               </Tab.Navigator>          
-            </NavigationContainer>
         );
     }
   }
