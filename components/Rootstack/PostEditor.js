@@ -3,6 +3,7 @@ import { View, StyleSheet, Keyboard
 , TouchableWithoutFeedback, Text, Dimensions
 , KeyboardAvoidingView, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import  CNRichTextEditor , { CNToolbar , getDefaultStyles, convertToObject, convertToHtmlString } from "react-native-cn-richtext-editor";
@@ -54,7 +55,8 @@ class FeedTab extends Component {
             selectedStyles : [],
             // value: [getInitialObject()] get empty editor
             value: convertToObject('<div><p><span>This is </span><span style="font-weight: bold;">bold</span><span> and </span><span style="font-style: italic;">italic </span><span>text</span></p></div>'
-            , this.customStyles)
+            , this.customStyles),
+            pickerResult:""
         };
         
         this.editor = null;
@@ -99,9 +101,35 @@ class FeedTab extends Component {
         });
         console.log("HTML: ", convertToHtmlString(value));
     }
+     stringToUint8Array(str) {
+        const length = str.length
+        const array = new Uint8Array(new ArrayBuffer(length))
+        for(let i = 0; i < length; i++) array[i] = str.charCodeAt(i)
+        return array
+    }
+    
+  async fileToBase64(uri) {
+        try {
+            FileSystem.readAsStringAsync(uri,{
+                encoding: FileSystem.EncodingTypes.Base64,
+            }).then(content=>{
+                console.log(content)
+                return base64.fromByteArray(stringToUint8Array(content))
+            })
+           
+           
+        } catch(e) {
+            console.warn('fileToBase64()', e.message)
+            return ''
+        }
+    }
 
     insertImage(url) {
-        console.log('Image url: ', url)
+        let imageUri = this.state.pickerResult ? `data:image/jpg;base64,${this.state.pickerResult.base64}` : null;
+
+       
+      
+    
 
         /* ImgToBase64.getBase64String(url)
         .then(base64String => console.log('Image Base 64: ', base64String))
@@ -109,7 +137,7 @@ class FeedTab extends Component {
 
         /* fileToBase64("test.pdf", "../files/test.pdf").then(result => {this.editor.insertImage(result)}); */
         /* console.log('Image Base 64: ', fileToBase64("Image", ).then(result => {this.editor.insertImage(result)}) ) */
-        this.editor.insertImage(url);
+        this.editor.insertImage(imageUri);
     }
 
     askPermissionsAsync = async () => {
@@ -129,6 +157,9 @@ class FeedTab extends Component {
         aspect: [4, 4],
         base64: true,
         });
+        this.setState({
+            pickerResult:result
+          });
         
         this.insertImage(result.uri);
     };
