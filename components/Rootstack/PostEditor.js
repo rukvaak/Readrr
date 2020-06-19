@@ -7,7 +7,6 @@ import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import  CNRichTextEditor , { CNToolbar , getDefaultStyles, convertToObject, convertToHtmlString } from "react-native-cn-richtext-editor";
-import ImgToBase64 from 'react-native-image-base64';
 import {
     Menu,
     MenuOptions, 
@@ -126,17 +125,6 @@ class FeedTab extends Component {
 
     insertImage(url) {
         let imageUri = this.state.pickerResult ? `data:image/jpg;base64,${this.state.pickerResult.base64}` : null;
-
-       
-      
-    
-
-        /* ImgToBase64.getBase64String(url)
-        .then(base64String => console.log('Image Base 64: ', base64String))
-        .catch(err => console.log('Image Base 64: ', err)); */
-
-        /* fileToBase64("test.pdf", "../files/test.pdf").then(result => {this.editor.insertImage(result)}); */
-        /* console.log('Image Base 64: ', fileToBase64("Image", ).then(result => {this.editor.insertImage(result)}) ) */
         this.editor.insertImage(imageUri);
     }
 
