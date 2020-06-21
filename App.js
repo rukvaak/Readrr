@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, Text, View, Image } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, Image, Button } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { Button, Container, Content, Header, Left, Body, Right, Title, Footer, FooterTab } from 'native-base';
+import {  Container, Content, Header, Left, Body, Right, Title, Footer, FooterTab } from 'native-base';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './components/Rootstack/logincomponent';
@@ -148,7 +148,16 @@ function Rootstack() {
         <Stack.Screen name="Webview" component={Webview} />
         <Stack.Screen name="Blogpage" component={Blogpage} />
         <Stack.Screen name="BlogAddpage" component={BlogAddpage} />
-        <Stack.Screen name="PostEditor" component={PostEditor} />
+        <Stack.Screen name="PostEditor" component={PostEditor} options={{
+         /*  headerTitle: "New TITLE",
+          headerRight: () => (
+            <Button
+              onPress={() => alert('This is a button!')}
+              title="SAVE"
+              color="#000000"
+            />
+          ), */
+        }}/>
         <Stack.Screen name="Homestack" component={Homestack} />
       </Stack.Navigator>
     </NavigationContainer>

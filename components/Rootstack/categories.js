@@ -33,9 +33,9 @@ let actionPayload;
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.data){
+        if(nextProps.data.categories){
             this.setState({
-                "categories":nextProps.data
+                "categories":nextProps.data.categories
             })
         }
         
@@ -77,7 +77,7 @@ let actionPayload;
                         size={25}
                         color="#ffffff"
                         onPress={()=>this.onCheck(item,index)}
-                        containerStyle={{position: "absolute", bottom: 0, left: 0,color:"#ffffff"}}
+                        containerStyle={{position: "absolute", bottom: 0, left: 0}}
                     />
                 </ImageBackground>
            </View>    

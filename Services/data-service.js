@@ -4,10 +4,7 @@ import Axios from 'axios';
 const URL ="http://192.168.1.149:3002/";
 let  token = ""
 let config = {
-    headers:{
-		"Content-Type":"application/json",
-        
-    }
+    headers:{"Content-Type":"application/json"}
 }
 export const receivedPosts = json => ({
 	type: 'POST_DATA_RESULT',
@@ -15,10 +12,11 @@ export const receivedPosts = json => ({
   });
   export function postRequest(channel) {
 	return dispatch => {
-		console.log(channel);
+		//console.log("Channel",channel);
+		config.headers.authorization = "Brearer "+channel.token
 	       Axios.post(URL+channel.route,channel.data,config)
 		  .then((json) => {
-			  console.log(json)
+			  //console.log(json)
 			  if(json.data.match){
 				  token = json.data.token
 			  }
@@ -31,11 +29,11 @@ export const receivedPosts = json => ({
   }
   export function getRequest(channel) {
 	return dispatch => {
-		console.log(channel);
+		//console.log(channel);
 		config.headers.authorization = "Brearer "+channel.token
 	       Axios.get(URL+channel.route,config)
 		  .then((json) => {
-			  console.log(json)
+			 // console.log(json)
 			dispatch(receivedPosts(json));
 		  },
 		).catch(err=>{

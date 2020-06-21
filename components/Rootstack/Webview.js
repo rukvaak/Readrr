@@ -14,7 +14,7 @@ export default class Webview extends React.Component {
   state = {
     swipeablePanelActive: false,
     font: 'Times New Roman, serif',
-    fontsize: 1
+    fontsize: 2
   }
  
   chfont(fontfamily, fontsize){
@@ -85,7 +85,7 @@ render(){
      [
       <ReadabilityWebView
    htmlCss={this.state.css}
-   url="https://www.nytimes.com/"
+   url="http://192.168.1.149:3002/?html=F:/misc/sandeep/RukVaaK/Readrr Server/ReadrrServer/Server/uploads/1592755233.html"
    title="The Earth is Flat"
  />,<View>
      <Button onPress={()=>this.setState({ swipeablePanelActive: true })} title="CHANGE FONT"></Button>

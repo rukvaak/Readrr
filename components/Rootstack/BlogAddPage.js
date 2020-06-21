@@ -1,16 +1,19 @@
 import React from 'react';
-import { Dimensions, StyleSheet, View, ScrollView, TextInput, TouchableOpacity, ImageBackground, FlatList, Button } from 'react-native';
+import { Dimensions, StyleSheet, View, ScrollView, TextInput, TouchableOpacity, ImageBackground, FlatList, Button,Picker } from 'react-native';
 import { Card, Image, Avatar, ListItem, Icon, Divider } from 'react-native-elements';
 import * as Font from 'expo-font';
+//import {Picker} from 'expo';
 import { Grid, Col, Row } from 'react-native-easy-grid';
 import { Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Text, Form, Item, Input } from 'native-base';
+import { Text, Form, Item, Input, Label } from 'native-base';
 import ValidationComponent from 'react-native-form-validator';
 import ViewMoreText from 'react-native-view-more-text';
 import ActionButton from 'react-native-action-button';
-import { Dropdown } from "react-native-material-dropdown";
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import { connect } from 'react-redux';
+import { getRequest } from '../../Services/data-service';
+let actionPayload;
 import {
   Menu,
   MenuOptions,
@@ -54,36 +57,6 @@ const Reviews = [
   }
 ]
 
-const Categories = [
-  {
-    title: "Arts",
-    value: "Arts"
-  },
-  {
-    title: "Business",
-    value: "Business"
-  },
-  { title: "Cinema", value: "Cinema" },
-  { title: "Culture", value: "Culture" },
-  { title: "Digital Marketing", value: "Digital Marketing" },
-  { title: "Essay", value: "Essay" },
-  { title: "Graphic design", value: "Graphic design" },
-  { title: "Health", value: "Health" },
-  { title: "History", value: "History" },
-  { title: "How to", value: "How to" },
-  { title: "Life Hacks", value: "Life Hacks" },
-  { title: "Motivation", value: "Motivation" },
-  { title: "Photography", value: "Photography" },
-  { title: "Poem", value: "Poem" },
-  { title: "Series", value: "Series" },
-  { title: "Short stories", value: "Short stories" },
-  { title: "Sports", value: "Sports" },
-  { title: "Story", value: "Story" },
-  { title: "Tech", value: "Tech" },
-  { title: "Theatre", value: "Theatre" },
-  { title: "Tips and Tricks", value: "Tips and Tricks" }
-]
-
 const actions = [
   {
     text: "Read",
@@ -93,7 +66,7 @@ const actions = [
   }
 ];
 
-class BlogPage extends React.Component {
+class BlogAddPage extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       header: () => null
@@ -113,14 +86,38 @@ class BlogPage extends React.Component {
     data: Data,
     reviews: Reviews,
     titleinput: '',
-    categories: Categories,
+    "categories": [],
     categoryinput: '',
-    postinsertimage: require('../../assets/CreatePlus.jpg'),
+    imagepickerbool: false,
+    preinsertimage: require('../../assets/CreatePlus.jpg'),
+    postinsertimage: '',
+    pickerResult: '',
     loading: true
   }
 
-  componentWillReceiveProps() {
-    this.setState({ data: this.props.data })
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data.categories) {
+      let categoriesinput = [];
+      nextProps.data.categories.forEach(element => {
+        var obj = {};
+        obj["label"] = element.category_name;
+        obj["value"] = element._id;
+        categoriesinput.push(obj);
+      });
+      this.setState({
+        "categories": categoriesinput
+      })
+      //console.log("Categories: ", categoriesinput)
+    }
+
+
+  }
+  componentWillMount() {
+    actionPayload = {
+      route: 'categories',
+      token: this.props.token //token is mandatory
+    }
+    this.props.onRequestUpdate();
   }
 
   async componentDidMount() {
@@ -130,10 +127,18 @@ class BlogPage extends React.Component {
       ...Ionicons.font,
     })
     this.setState({ loading: false })
+
+    this.props.navigation.setOptions({
+      title: this.state.titleinput,
+      /* headerRight: () => <Button
+      onPress={() => this.rendernavigation()}
+      title="SAVE"
+      color="#000000"
+    /> */
+  })
   }
 
   renderImageSelector() {
-    console.log("entering this menu")
     return (
       <Menu renderer={SlideInMenu} onSelect={this.onImageSelectorClicked}>
         <MenuTrigger>
@@ -144,13 +149,13 @@ class BlogPage extends React.Component {
           <MenuOption value={1} >
             <Text style={styles.menuOptionText}>
               Photo Library
-                </Text>
+            </Text>
           </MenuOption>
           <View style={styles.dividermenu} />
           <MenuOption value={2}>
             <Text style={styles.menuOptionText}>
               Cancel
-                </Text>
+            </Text>
           </MenuOption>
         </MenuOptions>
       </Menu>
@@ -169,16 +174,29 @@ class BlogPage extends React.Component {
     await this.askPermissionsAsync();
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [4, 4],
+      //aspect: [4,3],
       base64: true,
+      quality: 0.5
     });
+    if (!result.cancelled) {
+      this.setState({
+        pickerResult:result
+      });
+  
+      this.insertImage(result.uri);
 
-    this.insertImage(result.uri);
+    }
+
   };
 
   insertImage(url) {
-    console.log("file path uri", url);
-    this.setState({ postinsertimage: url })
+
+    //console.log("Local Url: ", this.state.pickerResult)
+    this.setState({ imagepickerbool: true })
+    let imageUri = this.state.pickerResult ? `data:image/jpg;base64,${this.state.pickerResult.base64}` : null;
+
+
+    this.setState({ postinsertimage: imageUri })
   }
 
   askPermissionsAsync = async () => {
@@ -208,29 +226,12 @@ class BlogPage extends React.Component {
   }
 
   rendernavigation() {
-    this.props.navigation.navigate('PostEditor');
-  }
-
-
-  createpost() {
-    var validated = this.validate({
-      email: { required: true, email: true },
-      pass: { required: true }
+    //console.log("categoryinput",this.state.categoryinput)
+    this.props.navigation.navigate('PostEditor', {  BlogTitle: this.state.titleinput,
+                                                    BlogCategory: this.state.categoryinput,
+                                                    BlogImage: this.state.postinsertimage,
+                                                    BlogDescription: this.state.descriptioninput
     });
-    this.setState({ validate: validated })
-
-    let user = {
-      user: this.state.name,
-      password: this.state.pass
-    }
-    if (validated) {
-      actionPayload = {
-        route: 'users/validate',
-        data: user
-      }
-      this.props.onRequestUpdate();
-
-    }
   }
 
   SelectCategories(value) {
@@ -243,29 +244,35 @@ class BlogPage extends React.Component {
         <View></View>
       );
     }
+
     return (
       <View style={{ flex: 1 }}>
         <ScrollView keyboardShouldPersistTaps="handled">
           <ImageBackground style={styles.imagebackground} source={require('../../assets/Blogpagebackground.png')}>
             <View /* style={{paddingTop: 20}} */>
               <Card title={
-                <Form style={styles.form}>
-                  <Item last rounded>
-                    <Input ref="title" onChangeText={(titleinput) => this.setState({ titleinput })} value={this.state.titleinput} placeholder="Enter the Title" placeholderTextColor="grey" />
+                <Form style={{paddingBottom: 10}}>
+                  <Item floatingLabel last style={{borderColor: 'transparent' ,borderBottomColor: '#000000'}}>
+                    <Label style={{textAlignVertical: 'center', color: '#000000'}}>Blog Title</Label>
+                    <Input ref="title" onChangeText={(titleinput) => this.setState({ titleinput })} value={this.state.titleinput}/>
                   </Item>
                   {/* {!this.state.validate && this.isFieldInError('title') && this.getErrorsInField('title').map(errorMessage => <Text style={{ textAlign: "center", flex: 1, color: "red" }}>{"Please Enter The Title"}</Text>)} */}
                 </Form>
               }
-                containerStyle={{ backgroundColor: '#e6e367', borderWidth: 0, shadowOpacity: 0, borderColor: 'transparent' }}
+                containerStyle={{ backgroundColor: '#e6e367', borderWidth: 0.5, shadowOpacity: 1, borderColor: 'gray' }}
               >
-                <Dropdown
-                  label="Select Category"
-                  labelFontSize={17}
-                  baseColor="#413E4F"
-                  data={this.state.categories}
-                  inputContainerStyle={{ borderBottomWidth: 0.8, paddingLeft: 20 }}
-                  onChangeText={value => this.SelectCategories(value)}
-                />
+                  <Label style={{textAlignVertical: 'center', color: '#000000', fontSize: 14}}>Select Category</Label>
+                <Picker
+                  mode="dropdown"
+                  //style={{ width: 120 }}
+                  selectedValue={this.state.categoryinput}
+                  onValueChange={itemValue => this.SelectCategories(itemValue)}
+                  style={{borderColor: '#000000'}}
+                >
+                  {this.state.categories.map((item, index) => {
+                    return <Picker.Item key={index} value={item.value} label={item.label} />
+                  })}
+                </Picker>
               </Card>
             </View>
             <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -274,10 +281,15 @@ class BlogPage extends React.Component {
                   </Text>
               <TouchableOpacity onPress={() => this.useLibraryHandler()}>
                 <View style={styles.item}>
+                  { this.state.imagepickerbool ?
+                    <Image style={styles.image}
+                    containerStyle={styles.imageContainer}
+                    source={{uri: this.state.postinsertimage}}
+                  /> :
                   <Image style={styles.image}
                     containerStyle={styles.imageContainer}
-                    source={this.state.postinsertimage}
-                  />
+                    source={this.state.preinsertimage}
+                  />}
                 </View>
               </TouchableOpacity>
             </View>
@@ -424,13 +436,13 @@ const styles = StyleSheet.create({
     borderRadius: 20
   },
   item: {
-    width: (screenWidth * 40) / 100,
+    width: (screenWidth * 45) / 100,
     height: (screenHeight * 35) / 100,
     alignSelf: 'center'
   },
   image: {
     ...StyleSheet.absoluteFillObject,
-    resizeMode: 'contain',
+    resizeMode: 'stretch',
     borderRadius: 10,
     alignSelf: 'center'
   },
@@ -441,4 +453,22 @@ const styles = StyleSheet.create({
 }
 );
 
-export default BlogPage;
+const mapStateToProps = (state, props) => {
+  return {
+    store: state.store,
+    loading: true,
+    data: state.items,
+    token: state.token
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onRequestUpdate: () => dispatch(getRequest(actionPayload)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BlogAddPage);

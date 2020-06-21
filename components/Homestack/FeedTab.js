@@ -6,7 +6,6 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import  CNRichTextEditor , { CNToolbar , getDefaultStyles, convertToObject, convertToHtmlString } from "react-native-cn-richtext-editor";
-import ImgToBase64 from 'react-native-image-base64';
 import {
     Menu,
     MenuOptions, 

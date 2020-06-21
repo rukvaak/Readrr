@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Keyboard
 , TouchableWithoutFeedback, Text, Dimensions
-, KeyboardAvoidingView, Platform } from 'react-native';
+, KeyboardAvoidingView, Platform, Button, ToastAndroid } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { connect } from 'react-redux';
+import { postRequest } from '../../Services/data-service';
 import  CNRichTextEditor , { CNToolbar , getDefaultStyles, convertToObject, convertToHtmlString } from "react-native-cn-richtext-editor";
 import {
     Menu,
@@ -17,35 +18,37 @@ import {
     renderers
   } from 'react-native-popup-menu';
 
+let actionPayload;
+
+const moment = require('moment');
+
 const { SlideInMenu } = renderers;
 
 const IS_IOS = Platform.OS === 'ios';
 const { width, height } = Dimensions.get('window');
 const defaultStyles = getDefaultStyles();
 
-// Convert file to base64 string
-const fileToBase64 = (filename, filepath) => {
-    return new Promise(resolve => {
-      var file = new File([filename], filepath);
-      var reader = new FileReader();
-      // Read file content on file loaded event
-      reader.onload = function(event) {
-        resolve(event.target.result);
-      };
-      
-      // Convert data to base64 
-      reader.readAsDataURL(file);
-    });
+const showToastWithGravity = () => {
+    ToastAndroid.showWithGravity(
+      "BLOG SAVED SUCCESSFULLY",
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM
+    );
   };
 
-class FeedTab extends Component {
- 
+class PostEditor extends React.Component {
+
     constructor(props) {
         super(props);
         this.customStyles = {...defaultStyles, body: {fontSize: 16}, heading : {fontSize: 16}
         , title : {fontSize: 20}, ol : {fontSize: 16 }, ul: {fontSize: 16}, bold: {fontSize: 16, fontWeight: 'bold', color: 'black'}
         };  
         this.state = {
+            BlogTitle: props.route.params.BlogTitle,
+            BlogCategory: props.route.params.BlogCategory,
+            BlogDescription: props.route.params.BlogDescription,
+            BlogImage: props.route.params.BlogImage,
+            BlogContent: '',
             selectedTag : 'body',
             selectedColor : 'default',
             selectedHighlight: 'default',
@@ -53,14 +56,56 @@ class FeedTab extends Component {
             highlights:['yellow_hl','pink_hl', 'orange_hl', 'green_hl','purple_hl','blue_hl'],
             selectedStyles : [],
             // value: [getInitialObject()] get empty editor
-            value: convertToObject('<div><p><span>This is </span><span style="font-weight: bold;">bold</span><span> and </span><span style="font-style: italic;">italic </span><span>text</span></p></div>'
-            , this.customStyles),
+            value: convertToObject('<div><p style="text-align:justify"><span></span></p></div>', this.customStyles),
             pickerResult:""
         };
-        
+        this.rendernavigation=this.rendernavigation.bind(this);
         this.editor = null;
 
     }
+
+    componentDidMount(){
+        this.props.navigation.setOptions({
+            title: this.state.BlogTitle,
+            headerRight: () => <Button
+            onPress={() => this.rendernavigation()}
+            title="SAVE"
+            color="#000000"
+          />
+        })
+
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.data) {
+          console.log("Recieved data")
+          showToastWithGravity();
+          this.props.navigation.navigate('Homestack');
+        }   
+      }
+
+    rendernavigation() {
+       // console.log("Value: ", this.state.value)
+        var finalvalue = this.state.value;
+        
+        //console.log("Final Blog Content: ",this.state.BlogContent)
+        var body = {};
+        body['blog_title'] = this.state.BlogTitle
+        body['blog_image'] = this.state.BlogImage
+        body['blog_text'] = this.state.BlogDescription
+        body['category_id'] = this.state.BlogCategory
+        body['blog_content'] = convertToHtmlString(finalvalue)
+        body['created_on'] = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
+
+        actionPayload = {
+            route: 'blogs',
+            data: body,
+            token: this.props.token,
+            image: true
+          }
+          this.props.onRequestUpdate();
+        //this.props.navigation.navigate('Homestack');
+      }
 
     onStyleKeyPress = (toolType) => {
         
@@ -98,29 +143,13 @@ class FeedTab extends Component {
         this.setState({
             value: value
         });
-        console.log("HTML: ", convertToHtmlString(value));
     }
+
      stringToUint8Array(str) {
         const length = str.length
         const array = new Uint8Array(new ArrayBuffer(length))
         for(let i = 0; i < length; i++) array[i] = str.charCodeAt(i)
         return array
-    }
-    
-  async fileToBase64(uri) {
-        try {
-            FileSystem.readAsStringAsync(uri,{
-                encoding: FileSystem.EncodingTypes.Base64,
-            }).then(content=>{
-                console.log(content)
-                return base64.fromByteArray(stringToUint8Array(content))
-            })
-           
-           
-        } catch(e) {
-            console.warn('fileToBase64()', e.message)
-            return ''
-        }
     }
 
     insertImage(url) {
@@ -142,8 +171,9 @@ class FeedTab extends Component {
         await this.askPermissionsAsync();
         let result = await ImagePicker.launchImageLibraryAsync({
         allowsEditing: true,
-        aspect: [4, 4],
+        //aspect: [4, 4],
         base64: true,
+        quality: 0.1
         });
         this.setState({
             pickerResult:result
@@ -156,8 +186,9 @@ class FeedTab extends Component {
         await this.askPermissionsAsync();
         let result = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
-        aspect: [4, 4],
+        //aspect: [4, 4],
         base64: true,
+        quality: 0.1
         });
         console.log(result);
         
@@ -567,4 +598,23 @@ optionTouchable: {
 // },
 };
 
-export default FeedTab;
+const mapStateToProps = (state, props) => {
+    //console.log("State: ", state.items)
+	return {
+		store :state.store,
+		loading: true,
+        data:state.items,
+        token:state.token
+	}
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+    onRequestUpdate: () => dispatch(postRequest(actionPayload)),
+    };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+) (PostEditor);

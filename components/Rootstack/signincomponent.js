@@ -99,7 +99,8 @@ class SigninScreen extends ValidationComponent {
     if (validated) {
       actionPayload = {
         route: 'users/validate',
-        data: user
+        data: user,
+        image: false
       }
       this.props.onRequestUpdate();
 
