@@ -5,6 +5,9 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import {Button,Text} from 'native-base';
 
+import { default as TopicTitle } from './TopicTitle';
+import { default as TitleandAuthor } from './TitleandAuthor';
+
 const { width: screenWidth } = Dimensions.get('window');
 
 const Data=[
@@ -64,20 +67,7 @@ class YouMayLike extends React.Component{
     }
         return(
             <View style={styles.screen}>
-              <View style={{flex: 1, flexDirection: 'row'}}>
-                <View style={{flex: 1}}>
-                  <Text style={styles.TextBold}>You May Like</Text>
-                </View>
-                <View style={{flex: 1}}>
-                  <TouchableOpacity
-                    style={styles.ButtonStyle}
-                    activeOpacity={0.5}
-                    onPress={this.login}
-                  >
-                    <Text style={styles.ButtonText}>View All</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+              <TopicTitle topictitle="You May Like" />
               <FlatList
                 horizontal
                 pagingEnabled={true}

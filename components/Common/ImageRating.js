@@ -5,27 +5,9 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import {Button,Text} from 'native-base';
 
-import { StackActions, NavigationActions } from 'react-navigation';
-/* const resetAction = StackActions.reset({
-     index: 1, 
-     key: null,
-     actions: [
-          NavigationActions.navigate({ routeName: 'Blogpage' })
-     ],
-}); */
+import { default as TopicTitle } from './TopicTitle';
 
-
-const resetAction = StackActions.reset({
-  index: 0,
-  key: null,
-  actions: [NavigationActions.navigate({ routeName: 'Homepage' })]
-});
-const goToBlogpage = NavigationActions.navigate({
-  routeName: 'Blogpage'
-});
-
-
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const Data=[
   {
@@ -92,20 +74,7 @@ class ImageRating extends React.Component{
     }
         return(
             <View style={styles.screen}>
-              <View style={{flex: 1, flexDirection: 'row'}}>
-                <View style={{flex: 1}}>
-                  <Text style={styles.TextBold}>Most Popular</Text>
-                </View>
-                <View style={{flex: 1}}>
-                  <TouchableOpacity
-                    style={styles.ButtonStyle}
-                    activeOpacity={0.5}
-                    onPress={this.login}
-                  >
-                    <Text style={styles.ButtonText}>View All</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+              <TopicTitle topictitle="Most Popular"/>
               <FlatList
                 horizontal
                 pagingEnabled={true}

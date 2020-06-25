@@ -44,6 +44,7 @@ let actionPayload;
     componentWillMount(){
         actionPayload={
             route:'categories',
+            body: {},
             token :this.props.token //token is mandatory
            }
            this.props.onRequestUpdate();

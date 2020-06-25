@@ -29,9 +29,10 @@ export const receivedPosts = json => ({
   }
   export function getRequest(channel) {
 	return dispatch => {
-		//console.log(channel);
+		//console.log('Channel: ', channel);
 		config.headers.authorization = "Brearer "+channel.token
-	       Axios.get(URL+channel.route,config)
+		config.params = channel.body
+		Axios.get(URL+channel.route, config)
 		  .then((json) => {
 			 // console.log(json)
 			dispatch(receivedPosts(json));

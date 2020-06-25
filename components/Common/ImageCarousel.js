@@ -3,7 +3,7 @@ import { Dimensions, StyleSheet, Text, View,FlatList,ScrollView, Button, Touchab
 import { SliderBox } from "react-native-image-slider-box";
 import Carousel, { Pagination, ParallaxImage  } from 'react-native-snap-carousel';
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const Data=[
     {
@@ -104,7 +104,7 @@ render(){
                     ref={ref => this.carousel = ref}
                     data={Data}
                     loop={true}
-                    sliderWidth={screenWidth}
+                    sliderWidth={screenWidth }
                     sliderHeight={screenWidth}
                     itemWidth={screenWidth - 180}
                     renderItem={this.renderItem}
@@ -123,18 +123,20 @@ const styles=StyleSheet.create(
     TextBold:{
             fontSize:20,
             fontWeight:"bold",
-            paddingLeft:20,
-            paddingBottom: 10
+            paddingLeft:10,
+            paddingBottom: 5
 
             },
             item: {
-              width: screenWidth - 180,
-              height: screenWidth - 80,
+              width: (screenWidth * 45) / 100,
+        height: (screenHeight * 35) / 100,
+              justifyContent: 'center'
             },
             image:{
               ...StyleSheet.absoluteFillObject,
               resizeMode: 'contain',
-              borderRadius: 10
+              borderRadius: 10,
+        borderColor: '#ffffff'
              },
            title: {
             fontSize: 20, 
@@ -142,7 +144,7 @@ const styles=StyleSheet.create(
             justifyContent: 'center',
             alignSelf: 'center',
             textAlign: 'center',
-            paddingTop: 30
+            paddingTop: 5
         },
         subtitle: {
             fontSize: 14,
@@ -153,8 +155,9 @@ const styles=StyleSheet.create(
         imageContainer: {
           flex: 1,
           marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-          backgroundColor: 'white',
-          borderRadius: 8,
+          backgroundColor: 'transparent',
+          borderRadius: 10,
+          borderColor: '#ffffff'
         },
         ButtonStyle: {
           justifyContent: 'center',

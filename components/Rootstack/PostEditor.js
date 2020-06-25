@@ -7,7 +7,7 @@ import * as Permissions from 'expo-permissions'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { postRequest } from '../../Services/data-service';
-import  CNRichTextEditor , { CNToolbar , getDefaultStyles, convertToObject, convertToHtmlString } from "react-native-cn-richtext-editor";
+import  CNRichTextEditor , { CNToolbar , getDefaultStyles, convertToObject,getInitialObject, convertToHtmlString } from "react-native-cn-richtext-editor";
 import {
     Menu,
     MenuOptions, 
@@ -56,7 +56,8 @@ class PostEditor extends React.Component {
             highlights:['yellow_hl','pink_hl', 'orange_hl', 'green_hl','purple_hl','blue_hl'],
             selectedStyles : [],
             // value: [getInitialObject()] get empty editor
-            value: convertToObject('<div><p style="text-align:justify"><span></span></p></div>', this.customStyles),
+            //value: convertToObject('<div><p style="text-align:justify"><span></span></p></div>', this.customStyles),
+            value: [getInitialObject()],
             pickerResult:""
         };
         this.rendernavigation=this.rendernavigation.bind(this);
@@ -93,7 +94,7 @@ class PostEditor extends React.Component {
         body['blog_title'] = this.state.BlogTitle
         body['blog_image'] = this.state.BlogImage
         body['blog_text'] = this.state.BlogDescription
-        body['category_id'] = this.state.BlogCategory
+        body['category_id'] = this.state.BlogCategory.trim()
         body['blog_content'] = convertToHtmlString(finalvalue)
         body['created_on'] = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
 
@@ -190,7 +191,7 @@ class PostEditor extends React.Component {
         base64: true,
         quality: 0.1
         });
-        console.log(result);
+        //console.log(result);
         
         this.insertImage(result.uri);
     };

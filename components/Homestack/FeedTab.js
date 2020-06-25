@@ -96,14 +96,14 @@ class FeedTab extends Component {
         this.setState({
             value: value
         });
-        console.log("HTML: ", convertToHtmlString(value));
+        //console.log("HTML: ", convertToHtmlString(value));
     }
 
     insertImage(url) {
-        console.log('Image url: ', url)
+        //console.log('Image url: ', url)
 
         ImgToBase64.getBase64String(url)
-        .then(base64String => console.log('Image Base 64: ', base64String))
+        .then(base64String => console.log('Image Base 64 conversion successful',))
         .catch(err => console.log('Image Base 64: ', err));
 
         /* fileToBase64("test.pdf", "../files/test.pdf").then(result => {this.editor.insertImage(result)}); */
@@ -139,7 +139,7 @@ class FeedTab extends Component {
         aspect: [4, 4],
         base64: true,
         });
-        console.log(result);
+        //console.log(result);
         
         this.insertImage(result.uri);
     };

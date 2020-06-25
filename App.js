@@ -40,13 +40,14 @@ const Tab = createMaterialTopTabNavigator();
 
 console.disableYellowBox = true;
 
-function Homestack() {
+class Homestack extends React.Component{
+  render(){
   return (
     <Tab.Navigator
       initialRouteName="Feed"
       tabBarPosition='bottom'
       lazy={true}
-      swipeEnabled={true}
+      swipeEnabled={false}
       backBehavior='none'
       tabBarVisible={true}
       options={() => ({
@@ -134,9 +135,12 @@ function Homestack() {
     </Tab.Navigator>
   )
 }
+}
+
 const Stack = createStackNavigator();
 
-function Rootstack() {
+class Rootstack extends React.Component{
+  render(){
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login" >
@@ -162,6 +166,7 @@ function Rootstack() {
       </Stack.Navigator>
     </NavigationContainer>
   )
+}
 }
 
 /* const navigator = createStackNavigator(

@@ -18,12 +18,12 @@ class AvatarComponent  extends React.Component{
   }
   
   state = {
-    data: this.props.data,
+    data: this.props.avatar,
     loading: true
   }
 
   componentWillReceiveProps(){
-    this.setState({data: this.props.data})
+    this.setState({data: this.props.avatar})
   }
 
   async componentDidMount() {

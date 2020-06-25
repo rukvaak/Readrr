@@ -41,6 +41,7 @@
     "react-native-gesture-handler": "~1.6.0",
     "react-native-google-signin": "^2.1.1",
     "react-native-grid-component": "^2.0.1",
+    "react-native-htmlview": "^0.15.0",
     "react-native-image-base64": "^0.1.4",
     "react-native-image-slider-box": "^1.0.12",
     "react-native-material-dropdown": "^0.11.1",

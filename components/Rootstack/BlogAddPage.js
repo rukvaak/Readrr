@@ -115,6 +115,7 @@ class BlogAddPage extends React.Component {
   componentWillMount() {
     actionPayload = {
       route: 'categories',
+      data: {},
       token: this.props.token //token is mandatory
     }
     this.props.onRequestUpdate();
