@@ -1,7 +1,12 @@
 import { connect } from 'react-redux';
 import Axios from 'axios';
 
-const URL ="http://192.168.1.149:3002/";
+const ipconfig = require('../Services/config');
+
+console.log('printing ip:',ipconfig)
+
+const URL =ipconfig.ipConfig.ipaddress+":3002/";
+
 let  token = ""
 let config = {
     headers:{"Content-Type":"application/json"}

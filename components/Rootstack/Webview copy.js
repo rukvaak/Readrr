@@ -5,6 +5,8 @@ import ReadabilityWebView from "react-native-webview-readability";
 import SwipeablePanel from "rn-swipeable-panel";
 import { Dropdown } from "react-native-material-dropdown";
 
+const ipconfig = require('../../Services/config');;
+
 export default class Webview extends React.Component {
   constructor(props){
     super(props)
@@ -89,7 +91,7 @@ render(){
      [
       <ReadabilityWebView
    htmlCss={this.state.css}
-   url="http://192.168.1.149:3002/?html=F:/misc/sandeep/RukVaaK/Readrr Server/ReadrrServer/Server/uploads/1592851019.html"
+   url={ipconfig.ipConfig.ipaddress + ":3002/?html=F:/misc/sandeep/RukVaaK/Readrr Server/ReadrrServer/Server/uploads/1592851019.html"}
    title="The Earth is Flat"
  />,<View>
      <Button onPress={()=>this.setState({ swipeablePanelActive: true })} title="CHANGE FONT"></Button>

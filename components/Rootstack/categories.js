@@ -13,6 +13,7 @@ import {getRequest} from '../../Services/data-service';
 import { CheckBox } from 'react-native-elements'
 import { connect } from 'react-redux';
 let actionPayload;
+const ipconfig = require('../../Services/config');;
  class CategoriesPage extends React.Component{
     static navigationOptions = {
         title: 'Choose your Interest',
@@ -65,7 +66,7 @@ let actionPayload;
         let checked;
         return (
            <View style={{borderWidth: 5, borderColor: "#ffffff",borderLeftColor:"#ffffff",overflow: 'hidden',borderRadius:20}}>
-                <ImageBackground source={{uri: 'http://192.168.1.149:3002?url='+item.category_image}} style={{height: 200, width: 175, flex: 1}}>
+                <ImageBackground source={{uri: ipconfig.ipConfig.ipaddress+':3002?url='+item.category_image}} style={{height: 200, width: 175, flex: 1}}>
                     <Text style={style.innerText}>
                         {item.category_name}
                     </Text> 

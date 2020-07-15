@@ -9,11 +9,7 @@ import SigninScreen from './components/Rootstack/signincomponent';
 import SignupScreen from './components/Rootstack/signupcomponent';
 import LanguageScreen from './components/Rootstack/langcomponent';
 import CategoriesPage from './components/Rootstack/categories';
-import LibraryPage from './components/Library';
 import { createStore, applyMiddleware, compose } from 'redux';
-import ImageRating from './components/Common/ImageRating';
-import Homepage from './components/homepage';
-import Main from './components/Main';
 import Webview from './components/Rootstack/Webview';
 import Blogpage from './components/Rootstack/BlogPage';
 import BlogAddpage from './components/Rootstack/BlogAddPage';
@@ -24,7 +20,6 @@ import dataService from './Services/data-service'
 import thunk from 'redux-thunk'
 const store = createStore(reducer, applyMiddleware(thunk));
 import { Provider } from 'react-redux';
-import ImageCarousel from './components/Common/ImageCarousel';
 const { width: screenWidth } = Dimensions.get('window');
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 

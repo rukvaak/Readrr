@@ -23,6 +23,11 @@ const Create = [
         id: "2",
         image: require('../../assets/LilyAllen.jpg'),
         title: "Create Quote"
+    },
+    {
+        id: "2",
+        image: require('../../assets/LilyAllen.jpg'),
+        title: "Create Stories"
     }
 ]
 
@@ -131,7 +136,7 @@ class CreatePostQuotePage extends React.Component {
         return (
             <TouchableOpacity onPress={()=>this.rendernavigation(item,index)}>
             <View style={styles.create}>
-                <MaterialIcons name="add" color='#ffffff' size={100}></MaterialIcons>
+                <MaterialIcons name="add" color='#ffffff' size={60}></MaterialIcons>
                 <Text style={styles.innerText}>
                     {item.title}
                 </Text>
@@ -168,7 +173,7 @@ class CreatePostQuotePage extends React.Component {
             <View style={{ flex: 1, backgroundColor: '#000000' }}>
                 <ScrollView keyboardShouldPersistTaps="handled">
                     <FlatList
-                        numColumns={2}                  // set number of columns 
+                        numColumns={3}                  // set number of columns 
                         columnWrapperStyle={styles.row}  // space them out evenly
 
                         data={this.state.create}
@@ -204,7 +209,7 @@ const styles = StyleSheet.create({
     },
     innerText: {
         color: 'white',
-        fontSize: 22,
+        fontSize: 18,
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
@@ -233,8 +238,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#424141',
         overflow: 'hidden',
         borderRadius: 20,
-        width: screenWidth / 2.2,
-        height: screenHeight / 5,
+        width: screenWidth / 3.5,
+        height: screenHeight / 8,
         justifyContent: 'center',
         alignItems: 'center'
 
@@ -244,8 +249,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#f2f2f2',
         overflow: 'hidden',
         borderRadius: 20,
-        width: screenWidth / 2.2,
-        height: screenHeight / 5,
+        width: screenWidth / 2.5,
+        height: screenHeight / 6,
         justifyContent: 'space-between'
     }
 }
