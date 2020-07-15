@@ -1,5 +1,5 @@
 var ipConfig = {
-    ipaddress: 'http://192.168.1.103'
+    ipaddress: 'http://192.168.43.62'
 };
 
 exports.ipConfig = ipConfig;

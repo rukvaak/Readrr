@@ -3,8 +3,6 @@ import Axios from 'axios';
 
 const ipconfig = require('../Services/config');
 
-console.log('printing ip:',ipconfig)
-
 const URL =ipconfig.ipConfig.ipaddress+":3002/";
 
 let  token = ""
