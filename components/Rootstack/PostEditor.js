@@ -46,6 +46,7 @@ class PostEditor extends React.Component {
         this.state = {
             BlogTitle: props.route.params.BlogTitle,
             BlogCategory: props.route.params.BlogCategory,
+            BlogLanguage: props.route.params.BlogLanguage,
             BlogDescription: props.route.params.BlogDescription,
             BlogImage: props.route.params.BlogImage,
             BlogContent: '',
@@ -95,6 +96,7 @@ class PostEditor extends React.Component {
         body['blog_image'] = this.state.BlogImage
         body['blog_text'] = this.state.BlogDescription
         body['category_id'] = this.state.BlogCategory.trim()
+        body['language_id'] = this.state.BlogLanguage.trim()
         body['blog_content'] = convertToHtmlString(finalvalue)
         body['created_on'] = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
 
