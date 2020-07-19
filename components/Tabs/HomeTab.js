@@ -12,7 +12,7 @@ import  { default as Avatarcomponent}   from '../Common/Avatar';
 import  { default as YouMayLike}   from '../Common/YouMayLike';
 import  { default as ImageRating}   from '../Common/ImageRating';
 import  { default as Topics}   from '../Common/topic';
-import { default as RecentlyViewed} from '../Common/RecentlyViewed';
+import { default as RecentlyAdded} from '../Common/RecentlyAdded';
 import { default as HeaderComponent} from '../Common/Header';
 import { default as FooterComponent} from '../Common/Footer';
 /* import { default as BottomDrawer} from '../components/Common/BottomDrawer'; */
@@ -104,7 +104,7 @@ export default class  HomeTab extends React.Component{
                         <Topics/>
                       </View>
                       <View style={{paddingVertical: 20}}>
-                        <RecentlyViewed/>
+                        <RecentlyAdded/>
                       </View>
                       <View style={{paddingVertical: 20}}>
                         <Avatarcomponent data={this.state.data}/>

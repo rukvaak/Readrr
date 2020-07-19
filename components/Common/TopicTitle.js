@@ -16,14 +16,6 @@ class TopicTitle extends React.Component {
         loading: true
     }
 
-    /* componentWillReceiveProps(){
-      if (this.props.recentlyviewed.length > 0) {
-  
-      this.setState({data: this.props.data})
-      console.log('Props: ',this.props.recentlyviewed.length)
-      }
-    } */
-
     async componentDidMount() {
         await Font.loadAsync({
             'Roboto': require('native-base/Fonts/Roboto.ttf'),

@@ -7,12 +7,12 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Button, Container, Content, Header, Left, Body, Right, Title, Footer, FooterTab } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { default as ImageCarousel } from '../Common/ImageCarousel';
+import { default as OurPicks } from '../Homestack/HomeTab Components/OurPicks';
 import { default as Avatarcomponent } from '../Common/Avatar';
-import { default as YouMayLike } from '../Common/YouMayLike';
-import { default as ImageRating } from '../Common/ImageRating';
+import { default as YouMayLike } from '../Homestack/HomeTab Components/YouMayLike';
+import { default as MostPopular } from '../Homestack/HomeTab Components/MostPopular';
 import { default as Topics } from '../Common/topic';
-import { default as RecentlyViewed } from '../Common/RecentlyViewed';
+import { default as RecentlyAdded } from './HomeTab Components/RecentlyAdded';
 import { default as HeaderComponent } from '../Common/Header';
 import { default as FooterComponent } from '../Common/Footer';
 /* import { default as BottomDrawer} from '../components/Common/BottomDrawer'; */
@@ -30,29 +30,6 @@ const { width: screenWidth } = Dimensions.get('window');
 
 const moment = require('moment');
 
-const Data = [
-  {
-    id: "1",
-    image: require('../../assets/MichaelRosen.jpg'),
-    Author: "Michael Rosen"
-  },
-  {
-    id: "2",
-    image: require('../../assets/MarcusBerkmann.jpg'),
-    Author: "Marcus Berkmann"
-  },
-  {
-    id: "3",
-    image: require('../../assets/DeliaOwens.jpg'),
-    Author: "Delia Owens"
-  },
-  {
-    id: "4",
-    image: require('../../assets/StassiSchroeder.jpg'),
-    Author: "Stassi Schroeder"
-  }
-]
-
 class HomeTab extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -67,15 +44,21 @@ class HomeTab extends React.Component {
   state = {
     loading: true,
     data: [],
-    avatar: Data,
-    recentlyviewed: []
+    avatar: '',
+    our_picks: {},
+    most_popular: {},
+    recently_added: {},
+    you_may_like: {}
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('entering this section', nextProps.data.blogData)
     if (nextProps.data.blogData) {
+      console.log('printing this data: ',nextProps.data.blogData[0].most_popular)
       this.setState({
-        recentlyviewed: nextProps.data.blogData
+        our_picks: nextProps.data.blogData[0].our_picks,
+        most_popular: nextProps.data.blogData[0].most_popular,
+        recently_added: nextProps.data.blogData[0].recently_added,
+        you_may_like: nextProps.data.blogData[0].you_may_like
       })
     }
 
@@ -134,23 +117,23 @@ class HomeTab extends React.Component {
           <ScrollView showsVerticalScrollIndicator={false} directionalLockEnabled={false}>
             <View>
               <View style={{ paddingTop: 10 }}>
-                <ImageCarousel />
+                <OurPicks our_picks={this.state.our_picks}/>
               </View>
               <View style={{ paddingVertical: 20 }}>
-                <ImageRating props={this.props} />
+                <MostPopular most_popular={this.state.most_popular} />
               </View>
-              <View style={{ paddingVertical: 20 }}>
+              {/* <View style={{ paddingVertical: 20 }}>
                 <Topics />
-              </View>
+              </View> */}
               <View style={{ paddingVertical: 20 }}>
-                <RecentlyViewed recentlyviewed={this.state.recentlyviewed}/>
+                <RecentlyAdded recently_added={this.state.recently_added}/>
               </View>
-              <View style={{ paddingVertical: 20 }}>
+              {/* <View style={{ paddingVertical: 20 }}>
               <Text style={styles.TextBold}>Follow Authors</Text>
                 <Avatarcomponent avatar={this.state.avatar} />
-              </View>
+              </View> */}
               <View style={{ paddingVertical: 20 }}>
-                <YouMayLike />
+                <YouMayLike you_may_like={this.state.you_may_like}/>
               </View>
             </View>
 

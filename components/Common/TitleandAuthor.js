@@ -4,7 +4,6 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { Text } from 'native-base';
 
-import { default as ImageComponent } from './ImageComponent';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -31,7 +30,6 @@ class TitleandAuthor extends React.Component {
     render() {
         return (
             <View style={styles.item}>
-                <ImageComponent image={this.props.image} />
                 <Text style={styles.title}>
                     {this.props.title}
                 </Text>
@@ -45,10 +43,7 @@ class TitleandAuthor extends React.Component {
 
 const styles = StyleSheet.create({
     item: {
-        width: (screenWidth * 45) / 100,
-        height: (screenHeight * 35) / 100,
-        alignSelf: 'center',
-        borderRadius: 20
+        alignSelf: 'center'
     },
     title: {
         fontSize: 20,

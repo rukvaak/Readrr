@@ -19,10 +19,6 @@ class RatingComponent extends React.Component{
     loading: true
   }
 
-  componentWillReceiveProps(){
-    this.setState({data: this.props.data})
-  }
-
   async componentDidMount() {
     await Font.loadAsync({
       'Roboto': require('native-base/Fonts/Roboto.ttf'),
@@ -35,17 +31,18 @@ class RatingComponent extends React.Component{
 
   render(){
         return(
-            <View style={styles.screen}>
                 <Rating
-                    type='custom'
                     ratingCount={5}
+                    defaultRating={0}
+                    startingValue={this.props.rating}
                     imageSize={20}
+                    readonly={true}
+                    fractions={1}
                     ratingBackgroundColor='#5abd8c'
                     ratingColor='#5abd8c'
-                    onFinishRating={this.ratingCompleted}
+                    //onFinishRating={this.ratingCompleted}
                     style={{ justifyContent: 'flex-start',   justifyContent: 'center', alignSelf: 'center' }}
-                />   
-            </View>         
+                /> 
         );
     }
   }
@@ -54,11 +51,7 @@ const styles = StyleSheet.create(
     {
         screen: {
             flex:1,
-            flexDirection: 'column',
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0
+            flexDirection: 'column'
         }
     }
 );
