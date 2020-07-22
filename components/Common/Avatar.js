@@ -18,7 +18,6 @@ class AvatarComponent  extends React.Component{
   }
   
   state = {
-    data: this.props.avatar,
     loading: true
   }
 
@@ -58,11 +57,11 @@ class AvatarComponent  extends React.Component{
                 horizontal
                 pagingEnabled={true}
                 showsHorizontalScrollIndicator={false}
-                data={this.state.data}
+                data={this.props.avatar}
                 renderItem={({item})=>
                       <Card style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
                         <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', width: 100}}>
-                            <Avatar rounded size='large' source={item.image} /> 
+                            <Avatar rounded size='large' source={{uri: item.profile_pic}} /> 
                             <View style={{paddingTop: 10}}>
                             <TouchableOpacity
                               style={styles.ButtonStyle}
@@ -75,7 +74,7 @@ class AvatarComponent  extends React.Component{
                             </TouchableOpacity>
                             </View>
                             <Text style={styles.title}>
-                            {item.Author } 
+                            {item.name } 
                             </Text>
                         </View>
                       </Card>   

@@ -6,32 +6,6 @@ import Carousel from 'react-native-snap-carousel';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const Data=[
-    {
-      id:"1",
-      Topic:"Biography",
-      backgroundColor: "#b7143c",
-      image:require('../../assets/GrossAnatomy.jpg')
-    },
-    {
-      id:"2",
-      Topic:"Business",
-      backgroundColor: "#e6a500",
-      image:require('../../assets/CowboysAndIndies.jpg')
-    },
-    {
-      id:"3",
-      Topic:"Children",
-      backgroundColor: "#ef4c45",
-      image:require('../../assets/TheLittleStoryBook.jpg')
-    },
-    {
-      id:"4",
-      Topic:"Cookery",
-      backgroundColor: "#f46217",
-      image:require('../../assets/LeanForLife.jpg')
-    },
-]
 class Topics extends React.Component{
  
 render(){

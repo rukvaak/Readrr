@@ -13,10 +13,7 @@ import { default as YouMayLike } from '../Homestack/HomeTab Components/YouMayLik
 import { default as MostPopular } from '../Homestack/HomeTab Components/MostPopular';
 import { default as Topics } from '../Common/topic';
 import { default as RecentlyAdded } from './HomeTab Components/RecentlyAdded';
-import { default as HeaderComponent } from '../Common/Header';
-import { default as FooterComponent } from '../Common/Footer';
-/* import { default as BottomDrawer} from '../components/Common/BottomDrawer'; */
-/* import { default as SideDrawer} from '../components/Common/SideDrawer'; */
+import { default as FollowAuthors } from './HomeTab Components/FollowAuthors';
 
 import { getRequest } from '../../Services/data-service';
 import { connect } from 'react-redux';
@@ -48,36 +45,69 @@ class HomeTab extends React.Component {
     our_picks: {},
     most_popular: {},
     recently_added: {},
-    you_may_like: {}
+    you_may_like: {},
+    topics: [],
+    authors: []
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.data.blogData) {
-      console.log('printing this data: ',nextProps.data.blogData[0].most_popular)
       this.setState({
         our_picks: nextProps.data.blogData[0].our_picks,
         most_popular: nextProps.data.blogData[0].most_popular,
         recently_added: nextProps.data.blogData[0].recently_added,
         you_may_like: nextProps.data.blogData[0].you_may_like
       })
+    } else if (nextProps.data.topicData) {
+      this.setState({
+        topics: nextProps.data.topicData
+      })
+    } else if (nextProps.data.authorData) {
+      this.setState({
+        authors: nextProps.data.authorData
+      })
     }
 
 
   }
   componentWillMount() {
-    var today = new Date();
-    var yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-    var body = {};
+    // var today = new Date();
+    // var yesterday = new Date(today);
+    // yesterday.setDate(today.getDate() - 1);
+     var body = {};
     body["event"] = "homePage"
-    body['fromdate'] = moment(yesterday).format("YYYY-MM-DD")
-    body['todate'] = moment(today).format("YYYY-MM-DD")
+    // body['fromdate'] = moment(yesterday).format("YYYY-MM-DD")
+    // body['todate'] = moment(today).format("YYYY-MM-DD")
     actionPayload = {
       route: 'blogs',
       body: body,
       token: this.props.token //token is mandatory
     }
     this.props.onRequestUpdate();
+
+    body = {};
+    body["event"] = "categoryList"
+    body["limit"] = 5
+    // body['fromdate'] = moment(yesterday).format("YYYY-MM-DD")
+    // body['todate'] = moment(today).format("YYYY-MM-DD")
+    actionPayload = {
+      route: 'categories',
+      body: body,
+      token: this.props.token //token is mandatory
+    }
+    this.props.onRequestUpdatetopics();
+
+    body = {};
+    body["event"] = "authorList"
+    body["limit"] = 5
+    // body['fromdate'] = moment(yesterday).format("YYYY-MM-DD")
+    // body['todate'] = moment(today).format("YYYY-MM-DD")
+    actionPayload = {
+      route: 'updateuserinfo',
+      body: body,
+      token: this.props.token //token is mandatory
+    }
+    this.props.onRequestUpdateauthors();
   }
 
 
@@ -122,16 +152,15 @@ class HomeTab extends React.Component {
               <View style={{ paddingVertical: 20 }}>
                 <MostPopular most_popular={this.state.most_popular} />
               </View>
-              {/* <View style={{ paddingVertical: 20 }}>
-                <Topics />
-              </View> */}
+              <View style={{ paddingVertical: 20 }}>
+                <Topics topics={this.state.topics}/>
+              </View>
               <View style={{ paddingVertical: 20 }}>
                 <RecentlyAdded recently_added={this.state.recently_added}/>
               </View>
-              {/* <View style={{ paddingVertical: 20 }}>
-              <Text style={styles.TextBold}>Follow Authors</Text>
-                <Avatarcomponent avatar={this.state.avatar} />
-              </View> */}
+              <View style={{ paddingVertical: 20 }}>
+                <FollowAuthors followauthors={this.state.authors} />
+              </View>
               <View style={{ paddingVertical: 20 }}>
                 <YouMayLike you_may_like={this.state.you_may_like}/>
               </View>
@@ -227,6 +256,8 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = dispatch => {
   return {
     onRequestUpdate: () => dispatch(getRequest(actionPayload)),
+    onRequestUpdatetopics: () => dispatch(getRequest(actionPayload)),
+    onRequestUpdateauthors: () => dispatch(getRequest(actionPayload))
   };
 };
 

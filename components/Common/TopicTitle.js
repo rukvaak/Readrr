@@ -4,11 +4,14 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { Text } from 'native-base';
 
+import * as RootNavigation from '../../RootNavigation.js';
+
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 class TopicTitle extends React.Component {
     constructor(props) {
         super(props);
+        this.rendernavigation = this.rendernavigation.bind(this);
     }
 
     state = {
@@ -25,6 +28,25 @@ class TopicTitle extends React.Component {
         this.setState({ loading: false })
     }
 
+    rendernavigation(){
+        // const navigation = ;
+        if (this.props.topictitle === "Our Picks") {
+            RootNavigation.navigate('HomePage_Viewall', {topictitle: this.props.topictitle});
+        } else if (this.props.topictitle === "Most Popular") {
+            RootNavigation.navigate('HomePage_Viewall', {topictitle: this.props.topictitle});
+        } else if (this.props.topictitle === "Topics") {
+            RootNavigation.navigate('HomePage_Viewall', {topictitle: this.props.topictitle});
+        } else if (this.props.topictitle === "Recently Added") {
+            RootNavigation.navigate('HomePage_Viewall', {topictitle: this.props.topictitle});
+        } else if (this.props.topictitle === "Follow Authors") {
+            RootNavigation.navigate('HomePage_Viewall', {topictitle: this.props.topictitle});
+        } else if (this.props.topictitle === "You May Like") {
+            RootNavigation.navigate('HomePage_Viewall', {topictitle: this.props.topictitle});
+        }
+        
+    }
+
+
     render() {
         return (
             <View style={styles.flexwithdir}>
@@ -35,7 +57,7 @@ class TopicTitle extends React.Component {
                     <TouchableOpacity
                         style={styles.ButtonStyle}
                         activeOpacity={0.5}
-                        onPress={this.login}
+                        onPress={this.rendernavigation}
                     >
                         <Text style={styles.ButtonText}>View All</Text>
                     </TouchableOpacity>

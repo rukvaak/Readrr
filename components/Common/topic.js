@@ -5,31 +5,19 @@ import { Image } from 'react-native-elements';
 import { default as TitleandAuthor } from './TitleandAuthor';
 import { default as TopicTitle } from './TopicTitle';
 
+const ipconfig = require('../../Services/config');
+
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-const Data = [
-  {
-    id: "1",
-    title: "Graphics",
-    backgroundColor: "#1c4a7e"
-  },
-  {
-    id: "2",
-    title: "Tips and Tricks",
-    backgroundColor: "#c65135"
-  },
-  {
-    id: "3",
-    title: "Something",
-    backgroundColor: "#1c4a7e"
-  },
-  {
-    id: "4",
-    title: "Anything",
-    backgroundColor: "#c65135"
-  },
-]
 class Topics extends React.Component {
+
+  constructor(props) {
+    super(props);
+  }
+  state = {
+    loading: true
+  }
+
 
   render() {
     return (
@@ -39,13 +27,13 @@ class Topics extends React.Component {
           horizontal
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
-          data={Data}
+          data={this.props.topics}
           renderItem={({ item }) =>
             <TouchableOpacity activeOpacity={0.5} onPress={this.login}>
-              <Image style={styles.image, { backgroundColor: item.backgroundColor }} containerStyle={styles.imageContainer}>
+              <Image style={styles.image, {backgroundColor: 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')'}} containerStyle={styles.imageContainer}>
                 <Text
                   style={styles.ButtonText}>
-                  {item.title}
+                  {item.category_name}
                 </Text>
               </Image>
             </TouchableOpacity>

@@ -4,6 +4,8 @@ import { Icon } from 'react-native-elements';
 import {  Container, Content, Header, Left, Body, Right, Title, Footer, FooterTab } from 'native-base';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from '@react-navigation/stack';
+import { navigationRef } from './RootNavigation';
+
 import LoginScreen from './components/Rootstack/logincomponent';
 import SigninScreen from './components/Rootstack/signincomponent';
 import SignupScreen from './components/Rootstack/signupcomponent';
@@ -13,7 +15,10 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import Webview from './components/Rootstack/Webview';
 import Blogpage from './components/Rootstack/BlogPage';
 import BlogAddpage from './components/Rootstack/BlogAddPage';
+import QuoteAddpage from './components/Rootstack/QuoteAddpage';
 import PostEditor from './components/Rootstack/PostEditor';
+
+import HomePage_Viewall from './components/Homestack/HomeTab Components/ViewAll Components/HomePage_Viewall';
 
 import reducer from './Services/Reducer/reducer'
 import dataService from './Services/data-service'
@@ -137,7 +142,7 @@ const Stack = createStackNavigator();
 class Rootstack extends React.Component{
   render(){
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator initialRouteName="Login" >
         <Stack.Screen options={{ headerShown: false, }} name="Login" component={LoginScreen} />
         <Stack.Screen name="Signin" component={SigninScreen} />
@@ -147,6 +152,7 @@ class Rootstack extends React.Component{
         <Stack.Screen name="Webview" component={Webview} />
         <Stack.Screen name="Blogpage" component={Blogpage} />
         <Stack.Screen name="BlogAddpage" component={BlogAddpage} />
+        <Stack.Screen name="QuoteAddpage" component={QuoteAddpage} />
         <Stack.Screen name="PostEditor" component={PostEditor} options={{
          /*  headerTitle: "New TITLE",
           headerRight: () => (
@@ -157,6 +163,7 @@ class Rootstack extends React.Component{
             />
           ), */
         }}/>
+        <Stack.Screen name="HomePage_Viewall" component={HomePage_Viewall} />
         <Stack.Screen name="Homestack" component={Homestack} />
       </Stack.Navigator>
     </NavigationContainer>

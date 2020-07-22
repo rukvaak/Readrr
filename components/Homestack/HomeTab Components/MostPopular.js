@@ -43,7 +43,7 @@ class MostPopular extends React.Component{
     /* this.props.props.navigation.dispatch(resetAction); */
     /* this.props.props.navigation.navigate('Rootstack', { screen: 'Blogpage' }); */
     /* this.props.props.navigation.dispatch(goToBlogpage); */
-    this.props.props.navigation.navigate('Blogpage');
+    this.props.navigation.navigate('Blogpage');
   }
 
   render(){
