@@ -243,12 +243,13 @@ export default class Webview extends React.Component {
 
   state = {
     swipeablePanelActive: false,
+    blog_content: this.props.route.params.blog_content,
     font: 'Roboto',
     fontsize: 20
   }
 
   chfont(fontfamily, fontsize) {
-    console.log(fontfamily, " fontsize: ", fontsize);
+    //console.log(fontfamily, " fontsize: ", fontsize);
     this.setState({ font: fontfamily, fontsize: fontsize })
     this.setState({
       css: `
@@ -355,7 +356,7 @@ export default class Webview extends React.Component {
       [
         <ScrollView>
           <HTMLView
-            value={htmlContent}
+            value={this.state.blog_content}
             stylesheet={{
               a: {
                 fontWeight: 'bold',

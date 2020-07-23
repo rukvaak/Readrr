@@ -75,7 +75,7 @@ class CategoriesPage extends React.Component {
                 token: this.props.token //token is mandatory
             }
             this.props.onPostUpdate();
-            console.log('selected categories: ', this.state.selectedcategories);
+            //console.log('selected categories: ', this.state.selectedcategories);
         } else {
             ToastAndroid.show('Please select atleast one category', ToastAndroid.LONG);
         }

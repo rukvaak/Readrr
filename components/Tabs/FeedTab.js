@@ -117,7 +117,7 @@ class FeedTab extends Component {
         aspect: [4, 4],
         base64: false,
         });
-        console.log(result);
+        //console.log(result);
         
         this.insertImage(result.uri);
     };
@@ -163,7 +163,7 @@ class FeedTab extends Component {
 
     onRemoveImage = ({url, id}) => {        
         // do what you have to do after removing an image
-        console.log(`image removed (url : ${url})`);
+        //console.log(`image removed (url : ${url})`);
         
     }
 

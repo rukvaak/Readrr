@@ -54,13 +54,13 @@ class SigninScreen extends ValidationComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("next" + JSON.stringify(nextProps))
+    //console.log("next" + JSON.stringify(nextProps))
 
     // take action here based on nextProps; 
     if (nextProps.data) {
-      console.log(nextProps.data.match)
+     // console.log(nextProps.data.match)
       if (nextProps.data.match != undefined && nextProps.data.match) {
-        console.log(nextProps["data"])
+        //console.log(nextProps["data"])
         token = nextProps["data"]["token"];
         this.props.onTokenRecieved();
         this.props.navigation.navigate('Language');

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, StyleSheet, View, ScrollView, TouchableOpacity, ImageBackground, FlatList } from 'react-native';
+import { Dimensions, StyleSheet, View, ScrollView, TouchableOpacity, ImageBackground, FlatList, ActivityIndicator } from 'react-native';
 import { Card, Image, Avatar, ListItem, Icon, Divider } from 'react-native-elements';
 import * as Font from 'expo-font';
 import { Grid, Col, Row } from 'react-native-easy-grid';
@@ -10,14 +10,19 @@ import ActionButton from 'react-native-action-button';
 
 import RatingComponent from '../Common/Rating';
 import AvatarVertical from '../Common/AvatarVertical';
+import { default as ImageComponent } from '../Common/ImageComponent';
+
+import { getRequest } from '../../Services/data-service';
+import { connect } from 'react-redux';
+let actionPayload;
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const Data = [
   {
     id: "2",
-    image: require('../../assets/LilyAllen.jpg'),
-    Author: "Lily Allen"
+    profile_pic: require('../../assets/LilyAllen.jpg'),
+    name: "Lily Allen"
   }
 ]
 
@@ -60,13 +65,39 @@ class BlogPage extends React.Component {
   }
 
   state = {
-    data: Data,
+    blogs: {},
+    author: [],
+    authors: Data,
     reviews: Reviews,
     loading: true
   }
 
-  componentWillReceiveProps() {
-    this.setState({ data: this.props.data })
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data.blogPageData) {
+      //console.log('blogggggggggggggggggggggg:', nextProps.data.blogPageData[0])
+      let user_data= {};
+      user_data['user_id']=(nextProps.data.blogPageData[0].user_id);
+      user_data['user_name']=(nextProps.data.blogPageData[0].user_name);
+      user_data['user_profile_pic']=(nextProps.data.blogPageData[0].user_profile_pic);
+     // console.log('uuuuuuuuuuuuuuuuuussssssssss', user_data)
+      this.setState({ blogs: nextProps.data.blogPageData[0],
+                      author: user_data,
+                      loading: false
+                    })
+    } 
+  }
+
+  componentWillMount() {
+    var body = {};
+    body["event"] = "blogPageData"
+    body["blog_id"] = this.props.route.params.blog_id
+    actionPayload = {
+      route: 'blogs',
+      body: body,
+      token: this.props.token //token is mandatory
+    }
+    this.props.onRequestUpdate();
+
   }
 
   async componentDidMount() {
@@ -96,49 +127,48 @@ class BlogPage extends React.Component {
   }
 
   rendernavigation() {
-    this.props.navigation.navigate('Webview');
+    this.props.navigation.navigate('Webview',{blog_content: this.state.blogs.blog_content });
   }
 
   render() {
     if (this.state.loading) {
       return (
-        <View></View>
+        <View style={{flex: 1, justifyContent: "center"}}>
+            <ActivityIndicator size="large" />
+        </View>
       );
     }
     return (
       <View style={{ flex: 1 }}>
         <ScrollView keyboardShouldPersistTaps="handled">
           <ImageBackground style={styles.imagebackground} source={require('../../assets/Blogpagebackground.png')}>
-            <View /* style={{paddingTop: 20}} */>
+            <View style={{paddingTop: 20}}>
               <Text style={styles.textmain}>
-                My Thoughts Exactly
+                {this.state.blogs.blog_title}
                     </Text>
-              <Divider style={styles.Divider} />
+              {/* <Divider style={styles.Divider} />
               <Text style={styles.textmain}>
                 'An unflinching, unputdownable book'
-                    </Text>
+                    </Text> */}
             </View>
             <View style={styles.screen}>
               <View style={{ flexDirection: 'row' }}>
-                <View style={{ flex: 1, flexDirection: 'column', paddingTop: screenHeight * 0.25 }}>
+                <View style={{ flex: 1, flexDirection: 'column', paddingTop: screenHeight * 0.3 }}>
                   <View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
-                      <RatingComponent />
+                      <RatingComponent rating={this.state.blogs.blog_totalRating}/>
                     </View>
                     <View>
                       <Text style={{ color: 'gray', textAlign: 'center' }}>
-                        {"6 Reviews"}
+                      {this.state.blogs.blog_numberRating+" Reviews"}
                       </Text>
                     </View>
                   </View>
                 </View>
                 <View style={styles.item}>
-                  <Image style={styles.image}
-                    containerStyle={styles.imageContainer}
-                    source={require('../../assets/MyThoughtsExactly.jpg')}
-                  />
+                  <ImageComponent image={this.state.blogs.blog_image} /> 
                 </View>
-                <View style={{ flex: 1, flexDirection: 'column', paddingTop: screenHeight * 0.25, paddingLeft: 20 }}>
+                <View style={{ flex: 1, flexDirection: 'column', paddingTop: screenHeight * 0.3, paddingLeft: 20 }}>
                   <View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                       <Icon name="visibility" color='gray' size={25} />
@@ -167,13 +197,16 @@ class BlogPage extends React.Component {
                   textStyle={{ textAlign: 'justify' }}
                 >
                   <Text style={{ color: '#ffffff', fontSize: 18, textAlign: 'justify' }}>
-                    I am a mother, and I was a wife. I'm also a singer and a songwriter. I have loved and been let down. I've been stalked and assaulted. I am a success and a failure. I've been broken and full of hope. I am all these things and more. I'm telling my truth because when women share their stories, loudly and clearly and honestly, things begin to change - for the better. So, this is my story. These are my thoughts exactly
+                    {this.state.blogs.blog_text}
                         </Text>
                 </ViewMoreText>
               </Card>
             </View>
             <View style={{ paddingTop: 10 }}>
-              <AvatarVertical data={this.state.data} bottomDivider={false} />
+            <Text style={styles.textinner}>
+                Written By
+                </Text>
+              <AvatarVertical author={this.state.author} bottomDivider={false} />
               <Text style={styles.textinner}>
                 Reviews
                 </Text>
@@ -233,7 +266,7 @@ const styles = StyleSheet.create({
     textAlign: 'right'
   },
   textmain: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
     marginHorizontal: (screenWidth * 20) / 100,
@@ -299,9 +332,12 @@ const styles = StyleSheet.create({
     borderRadius: 20
   },
   item: {
-    width: (screenWidth * 40) / 100,
+    width: (screenWidth * 45) / 100,
     height: (screenHeight * 35) / 100,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+    marginTop: 20
   },
   image: {
     ...StyleSheet.absoluteFillObject,
@@ -316,4 +352,22 @@ const styles = StyleSheet.create({
 }
 );
 
-export default BlogPage;
+const mapStateToProps = (state, props) => {
+  return {
+    store: state.store,
+    loading: true,
+    data: state.items,
+    token: state.token
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onRequestUpdate: () => dispatch(getRequest(actionPayload))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+) (BlogPage);

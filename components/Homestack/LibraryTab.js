@@ -1,76 +1,86 @@
 import React from 'react';
-import { Dimensions, StyleSheet,View,ImageBackground,Platform, ScrollView, Text, StatusBar} from 'react-native';
-import { EvilIcons,AntDesign,FontAwesome5,Entypo,MaterialCommunityIcons,MaterialIcons,Ionicons } from '@expo/vector-icons';
+import { Dimensions, StyleSheet, View, ImageBackground, Platform, ScrollView, Text, StatusBar } from 'react-native';
+import { EvilIcons, AntDesign, FontAwesome5, Entypo, MaterialCommunityIcons, MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { Card, ListItem, Icon } from 'react-native-elements';
 import * as Font from 'expo-font';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import {Button,Container, Content, Tab, Tabs, TabHeading,ScrollableTab } from 'native-base';
+import { Button, Container, Content, Tab, Tabs, TabHeading, ScrollableTab } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
-import  { default as Avatarcomponent}   from '../Common/Avatar';
-import { default as AvatarVertical} from '../Common/AvatarVertical';
-import { default as HeaderComponent} from '../Common/Header';
-import { default as FooterComponent} from '../Common/Footer';
+import { default as Avatarcomponent } from '../Common/Avatar';
+import { default as AvatarVertical } from '../Common/AvatarVertical';
+import { default as HeaderComponent } from '../Common/Header';
+import { default as FooterComponent } from '../Common/Footer';
 import { preventAutoHide } from 'expo/build/launch/SplashScreen';
-import Reading from '../Common/Reading';
-import Wishlist from '../Common/Wishlist';
-import Author from '../Common/Author';
-import Topics from '../Common/Topics';
+import Reading from '../Homestack/Library Components/Reading';
+import Quotes from '../Homestack/Library Components/Quotes';
+import Wishlist from '../Homestack/Library Components/Wishlist';
 
- 
+
 const { width: screenWidth } = Dimensions.get('window');
 
-const Data=[
+const Data = [
   {
-    id:"1",
-    image:require('../../assets/MichaelRosen.jpg'),
+    id: "1",
+    image: require('../../assets/MichaelRosen.jpg'),
     Author: "Michael Rosen"
   },
   {
-    id:"2",
-    image:require('../../assets/MarcusBerkmann.jpg'),
+    id: "2",
+    image: require('../../assets/MarcusBerkmann.jpg'),
     Author: "Marcus Berkmann"
   },
   {
-    id:"3",
-    image:require('../../assets/DeliaOwens.jpg'),
+    id: "3",
+    image: require('../../assets/DeliaOwens.jpg'),
     Author: "Delia Owens"
   },
   {
-    id:"4",
-    image:require('../../assets/StassiSchroeder.jpg'),
+    id: "4",
+    image: require('../../assets/StassiSchroeder.jpg'),
     Author: "Stassi Schroeder"
   }
 ]
 
-class MyTabs extends React.Component{
-  render(){
-    return(
-        <Tabs locked renderTabBar={()=> <ScrollableTab />}>
-          <Tab heading={ 
-            <TabHeading>
-              <MaterialIcons name="local-library" size={18} color="white" />
-              <Text style={styles.tabText}>
-                READING
+class MyTabs extends React.Component {
+  render() {
+    return (
+      <Tabs locked renderTabBar={() => <ScrollableTab />}>
+        <Tab heading={
+          <TabHeading>
+            <MaterialIcons name="local-library" size={18} color="white" />
+            <Text style={styles.tabText}>
+              QUOTES
               </Text>
-            </TabHeading>
-            }
-          >
-            <Reading/>
-          </Tab>
-          <Tab heading={ 
-            <TabHeading>
-              <MaterialIcons name="local-library" size={18} color="white" />
-              <Text style={styles.tabText}>
-                WISHLIST
+          </TabHeading>
+        }
+        >
+          <Quotes />
+        </Tab>
+        <Tab heading={
+          <TabHeading>
+            <MaterialIcons name="local-library" size={18} color="white" />
+            <Text style={styles.tabText}>
+              READING
               </Text>
-            </TabHeading>
-            }
-          >
-            <Wishlist/>
-          </Tab>
-          <Tab heading={ 
+          </TabHeading>
+        }
+        >
+          <Reading />
+        </Tab>
+        <Tab heading={
+          <TabHeading>
+            <MaterialIcons name="local-library" size={18} color="white" />
+            <Text style={styles.tabText}>
+              WISHLIST
+              </Text>
+          </TabHeading>
+        }
+        >
+          <Wishlist />
+        </Tab>
+        {/*        <Tab heading={ 
             <TabHeading>
               <FontAwesome5 name="pen-alt" size={18} color="white" />
               <Text style={styles.tabText}>
@@ -80,8 +90,8 @@ class MyTabs extends React.Component{
             }
           >
             <Author/>
-          </Tab>
-          <Tab heading={ 
+          </Tab> */}
+        {/*           <Tab heading={ 
             <TabHeading>
               <FontAwesome5 name="list-alt" size={18} color="white" />
               <Text style={styles.tabText}>
@@ -91,31 +101,31 @@ class MyTabs extends React.Component{
             }
           >
             <Topics/>
-          </Tab>
-        </Tabs>
+          </Tab> */}
+      </Tabs>
     )
   }
 }
 
-export default class  LibraryTab extends React.Component{
-  
-    static navigationOptions = ({ navigation }) => {
-        return {
-           header: () => null
-        } 
+export default class LibraryTab extends React.Component {
+
+  static navigationOptions = ({ navigation }) => {
+    return {
+      header: () => null
     }
-    
-  constructor(props){
+  }
+
+  constructor(props) {
     super(props);
   }
-  
+
   state = {
     loading: true,
     data: Data
   }
-  
 
-  componentDidMount(){
+
+  componentDidMount() {
     this._loadInitialState.done();
   }
 
@@ -129,7 +139,7 @@ export default class  LibraryTab extends React.Component{
   }
 
 
-  render(){
+  render() {
     if (this.state.loading) {
       return (
         <View></View>
@@ -142,19 +152,19 @@ export default class  LibraryTab extends React.Component{
         style={{ backgroundColor: '#5abd8c' }}
       />
     );
-        return(
-            <Container> 
-                {/* <HeaderComponent/> */}
+    return (
+      <Container>
+        {/* <HeaderComponent/> */}
 
-                <Content style={{flex:1}}> 
-                  <MyTabs/>
-                </Content>
+        <Content style={{ flex: 1 }}>
+          <MyTabs />
+        </Content>
 
-                {/* <FooterComponent/>    */}          
-            </Container>
-        );
-    }
+        {/* <FooterComponent/>    */}
+      </Container>
+    );
   }
+}
 
 
 
@@ -168,22 +178,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-    screen: {
-    flex:1
-    },
-    tabText: { 
-      color: '#ffffff', 
-      fontWeight: 'bold', 
-      paddingLeft: 5,
-      fontSize: 10
-    },
-background:{
-  backgroundColor: '#5abd8c',    
-  width: screenWidth, // applied to Image
-  height: screenWidth - 100 ,
-  borderBottomLeftRadius: 200,
-  borderBottomRightRadius: 200,
-  paddingTop: Platform.OS === 'ios' ? 60 : 0,
-}
+  screen: {
+    flex: 1
+  },
+  tabText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+    paddingLeft: 5,
+    fontSize: 10
+  },
+  background: {
+    backgroundColor: '#5abd8c',
+    width: screenWidth, // applied to Image
+    height: screenWidth - 100,
+    borderBottomLeftRadius: 200,
+    borderBottomRightRadius: 200,
+    paddingTop: Platform.OS === 'ios' ? 60 : 0,
+  }
 }
 );

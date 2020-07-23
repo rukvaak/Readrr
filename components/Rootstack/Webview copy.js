@@ -20,7 +20,7 @@ export default class Webview extends React.Component {
   }
  
   chfont(fontfamily, fontsize){
-      console.log(fontfamily," fontsize: ", fontsize);
+      //console.log(fontfamily," fontsize: ", fontsize);
     this.setState({ font :  fontfamily, fontsize: fontsize})
     this.setState({css:`
     body {

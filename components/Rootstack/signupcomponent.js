@@ -57,7 +57,7 @@ export default class SignupScreen extends ValidationComponent {
       pass: { required: true }
     });
     this.setState({ validate: validated })
-    console.log(validated);
+    //console.log(validated);
     let user = {
       name: this.state.name,
       email: this.state.email,
@@ -68,7 +68,7 @@ export default class SignupScreen extends ValidationComponent {
     if (validated) {
       let api = new ApiService();
       api.signUpUsers(user).then(result => {
-        console.log(result.data);
+        //console.log(result.data);
         if (result.data.message) {
           this.setState({
             errorMessage: result.data.message

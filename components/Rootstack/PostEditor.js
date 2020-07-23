@@ -80,7 +80,7 @@ class PostEditor extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.data) {
-          console.log("Recieved data")
+          //console.log("Recieved data")
           showToastWithGravity();
           this.props.navigation.navigate('Homestack');
         }   
@@ -239,7 +239,7 @@ class PostEditor extends React.Component {
 
     onRemoveImage = ({url, id}) => {        
         // do what you have to do after removing an image
-        console.log(`image removed (url : ${url})`);
+        //console.log(`image removed (url : ${url})`);
         
     }
 

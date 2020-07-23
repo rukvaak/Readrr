@@ -105,7 +105,7 @@ state = {
           <Text style={styles.TextBold}>Follow Authors</Text>
           <Avatarcomponent data={Data}/>
           <Text style={styles.TextBold}>Top Authors</Text>
-          <AvatarVertical data={Data}/>
+          {/* <AvatarVertical data={Data}/> */}
         </Content>
       
     );

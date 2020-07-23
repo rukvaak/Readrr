@@ -11,7 +11,7 @@ export default class ApiService extends React.Component {
    URL ="http://grocery.slvbuyandsave.com:3002/";
 
   getCategories(){
-    console.log(URL+'getCategories');
+    //console.log(URL+'getCategories');
     return axios.get(this.URL+'getCategories');
   }
 
@@ -22,7 +22,7 @@ export default class ApiService extends React.Component {
 
 
   getproducts(categoryID){
-    console.log(categoryID);
+    //console.log(categoryID);
     const config = {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
@@ -39,7 +39,7 @@ export default class ApiService extends React.Component {
       'Content-Type': 'application/x-www-form-urlencoded'
     }
   }
-  console.log(order);
+  //console.log(order);
   const params = new URLSearchParams();
         params.append('cart',order);
     return axios.post(this.URL+'insertCart',params,config)
@@ -64,7 +64,7 @@ sendToken(token,authyId){
 let tokenPayload = {}
 tokenPayload.authyId = authyId;
 tokenPayload.token = token
-console.log(JSON.stringify(tokenPayload))
+//console.log(JSON.stringify(tokenPayload))
     const params = new URLSearchParams();
   params.append('token',JSON.stringify(tokenPayload));
 return axios.post(this.URL+'requestToken',params,config)

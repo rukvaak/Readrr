@@ -59,7 +59,7 @@ class QuoteAddpage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.data) {
-      console.log("Recieved data")
+      //("Recieved data")
       showToastWithGravity();
       this.props.navigation.navigate('Homestack');
     }   

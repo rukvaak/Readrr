@@ -14,7 +14,6 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 class OurPicks extends React.Component {
   constructor(props) {
     super(props);
-    this.rendernavigation = this.rendernavigation.bind(this);
   }
   state = {
     activeIndex: 1,
@@ -22,14 +21,10 @@ class OurPicks extends React.Component {
   };
 
 
-  rendernavigation() {
-    RootNavigation.navigate('Blogpage');
-  }
-
-
   renderItem({ item, index }, parallaxProps) {
     return (
-      <TouchableOpacity activeOpacity={0.5} onPress={() => this.rendernavigation()}>
+      <TouchableOpacity activeOpacity={0.5} 
+        onPress={() => RootNavigation.navigate('Blogpage',{ blog_id: item._id})}>
         <View style={styles.item} >
           <ParallaxImage
             style={styles.image}
