@@ -9,6 +9,8 @@ import { default as TitleandAuthor } from '../../Common/TitleandAuthor';
 import { default as TopicTitle } from '../../Common/TopicTitle';
 import { default as ImageComponent } from '../../Common/ImageComponent';
 
+import * as RootNavigation from '../../../RootNavigation.js';
+
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 
@@ -52,10 +54,8 @@ class RecentlyAdded extends React.Component {
           showsHorizontalScrollIndicator={false}
           data={this.props.recently_added}
           renderItem={({ item }) =>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              onPress={this.rendernavigation}
-            >
+          <TouchableOpacity activeOpacity={0.5} 
+          onPress={() => RootNavigation.navigate('Blogpage',{ blog_id: item._id})}>
               <View style={styles.item}>
                 <ImageComponent image={item.blog_image} />
                 <TitleandAuthor title={item.blog_title} author={item.blog_author} />

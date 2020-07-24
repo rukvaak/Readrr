@@ -63,7 +63,7 @@ class Quotes extends React.Component {
       user_data['user_id'] = (nextProps.data.quoteData[0].user_id);
       user_data['user_name'] = (nextProps.data.quoteData[0].user_name);
       user_data['user_profile_pic'] = (nextProps.data.quoteData[0].user_profile_pic);
-      console.log('qqqqqqqqqquuuuuuuuuoooooooootes:', user_data)
+      //console.log('qqqqqqqqqquuuuuuuuuoooooooootes:', user_data)
       this.setState({
         quotes: nextProps.data.quoteData,
         author: user_data
@@ -98,7 +98,7 @@ class Quotes extends React.Component {
   }
 
   postlike(item) {
-    item.like_icon === 'heart-o' ?  item.like_icon = 'heart' : item.like_icon = 'heart-o'
+    item.like_icon === 'heart' ?  item.like_icon = 'heart-o' : item.like_icon = 'heart'
     if (item.like_icon === 'heart' ) {
       item.quotes_likes++
     } else if(item.like_icon === 'heart-o' ) {
@@ -138,16 +138,16 @@ class Quotes extends React.Component {
               containerStyle={{justifyContent: 'flex-start'}}>
               <AvatarVertical author={this.state.author} bottomDivider={false} />
               <Divider style={styles.Divider} />
-              {/* <Icon
+              <Icon
                 raised={false}
-                name={item.like_icon}
+                name={item.like_icon === undefined ? 'heart-o' : item.like_icon}
                 type='font-awesome'
                 color='grey'
                 size={30}
                 onPress={() => this.postlike(item)} />
               <Text style={{ textAlign: 'center' }}>
                 {item.quotes_likes+" likes"}
-              </Text> */}
+              </Text>
             </Card>
           }
         />

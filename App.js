@@ -19,6 +19,7 @@ import QuoteAddpage from './components/Rootstack/QuoteAddpage';
 import PostEditor from './components/Rootstack/PostEditor';
 
 import HomePage_Viewall from './components/Homestack/HomeTab Components/ViewAll Components/HomePage_Viewall';
+import Topics_ViewAll from './components/Homestack/HomeTab Components/ViewAll Components/Topics_ViewAll';
 
 import reducer from './Services/Reducer/reducer'
 import dataService from './Services/data-service'
@@ -33,7 +34,7 @@ import HomeTab from './components/Homestack/HomeTab';
 import LibraryTab from './components/Homestack/LibraryTab';
 import FeedTab from './components/Homestack/FeedTab';
 import ChatTab from './components/Homestack/ChatTab';
-import CreatePostQuotePage from './components/Rootstack/CreatePostQuotePage';
+import CreatePostQuotePage from './components/Homestack/CreatePostQuotePage';
 import { NavigationContainer } from '@react-navigation/native';
 
 const Tab = createMaterialTopTabNavigator();
@@ -164,6 +165,7 @@ class Rootstack extends React.Component{
           ), */
         }}/>
         <Stack.Screen name="HomePage_Viewall" component={HomePage_Viewall} />
+        <Stack.Screen name="Topics_ViewAll" component={Topics_ViewAll} />
         <Stack.Screen name="Homestack" component={Homestack} />
       </Stack.Navigator>
     </NavigationContainer>

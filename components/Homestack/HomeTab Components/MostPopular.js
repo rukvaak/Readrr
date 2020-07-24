@@ -8,6 +8,8 @@ import { default as ImageComponent } from '../../Common/ImageComponent';
 import { default as TitleandAuthor } from '../../Common/TitleandAuthor';
 import { default as RatingComponent } from '../../Common/Rating';
 
+import * as RootNavigation from '../../../RootNavigation.js';
+
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 class MostPopular extends React.Component{
@@ -18,7 +20,6 @@ class MostPopular extends React.Component{
 }
   constructor(props){
     super(props);
-    this.rendernavigation = this.rendernavigation.bind(this);
   }
   
   state = {
@@ -39,13 +40,6 @@ class MostPopular extends React.Component{
     this.setState({ loading: false })
   }
 
-  rendernavigation(){
-    /* this.props.props.navigation.dispatch(resetAction); */
-    /* this.props.props.navigation.navigate('Rootstack', { screen: 'Blogpage' }); */
-    /* this.props.props.navigation.dispatch(goToBlogpage); */
-    this.props.navigation.navigate('Blogpage');
-  }
-
   render(){
     if (this.state.loading) {
       return (
@@ -61,10 +55,8 @@ class MostPopular extends React.Component{
                 showsHorizontalScrollIndicator={false}
                 data={this.props.most_popular}
                 renderItem={({item})=>
-                      <TouchableOpacity
-                        activeOpacity={0.5}
-                        onPress={this.rendernavigation}
-                      >
+                <TouchableOpacity activeOpacity={0.5} 
+                onPress={() => RootNavigation.navigate('Blogpage',{ blog_id: item._id})}>
                         <View style={styles.item}>
                             <ImageComponent image={item.blog_image} /> 
                             <TitleandAuthor title={item.blog_title} author={item.blog_author} />

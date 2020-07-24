@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, StyleSheet, View, FlatList, Text, ImageBackground } from 'react-native';
-import { Card, Avatar} from 'react-native-elements';
+import { Card, Avatar } from 'react-native-elements';
 import * as Font from 'expo-font'
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -9,6 +9,8 @@ import { Button, Container, Content, Header, Left, Body, Right, Title, Footer, F
 import { default as TitleandAuthor } from '../../../Common/TitleandAuthor';
 import { default as ImageComponent } from '../../../Common/ImageComponent';
 import { default as RatingComponent } from '../../../Common/Rating';
+
+import * as RootNavigation from '../../../../RootNavigation.js';
 
 import { getRequest } from '../../../../Services/data-service';
 import { connect } from 'react-redux';
@@ -110,10 +112,8 @@ class HomePage_Viewall extends React.Component {
             this.props.route.params.topictitle === "Recently Added" ||
             this.props.route.params.topictitle === "You May Like") {
             return (
-                <TouchableOpacity
-                    activeOpacity={0.5}
-                    onPress={this.rendernavigation}
-                >
+                <TouchableOpacity activeOpacity={0.5}
+                    onPress={() => RootNavigation.navigate('Blogpage', { blog_id: item._id })}>
                     <View style={styles.item}>
                         <ImageComponent image={item.blog_image} />
                         <TitleandAuthor title={item.blog_title} author={item.blog_author} />
@@ -122,10 +122,8 @@ class HomePage_Viewall extends React.Component {
             )
         } else if (this.props.route.params.topictitle === "Most Popular") {
             return (
-                <TouchableOpacity
-                    activeOpacity={0.5}
-                    onPress={this.rendernavigation}
-                >
+                <TouchableOpacity activeOpacity={0.5}
+                    onPress={() => RootNavigation.navigate('Blogpage', { blog_id: item._id })}>
                     <View style={styles.item}>
                         <ImageComponent image={item.blog_image} />
                         <TitleandAuthor title={item.blog_title} author={item.blog_author} />
@@ -135,7 +133,8 @@ class HomePage_Viewall extends React.Component {
             )
         } else if (this.props.route.params.topictitle === "Topics") {
             return (
-                <TouchableOpacity activeOpacity={0.5} onPress={this.login}>
+                <TouchableOpacity activeOpacity={0.5} 
+                    onPress={() => RootNavigation.navigate('Topics_ViewAll', {topictitle: 'TopicBlogs', topic_id: item._id})}>
                     <View style={{ borderWidth: 5, borderColor: "#ffffff", borderLeftColor: "#ffffff", overflow: 'hidden', borderRadius: 20 }}>
                         <ImageBackground source={{ uri: ipconfig.ipConfig.ipaddress + ':3002?url=' + item.category_image }} style={{ height: 200, width: 175, flex: 1 }}>
                             <Text style={styles.innerText}>

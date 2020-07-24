@@ -11,7 +11,7 @@ import { default as OurPicks } from '../Homestack/HomeTab Components/OurPicks';
 import { default as Avatarcomponent } from '../Common/Avatar';
 import { default as YouMayLike } from '../Homestack/HomeTab Components/YouMayLike';
 import { default as MostPopular } from '../Homestack/HomeTab Components/MostPopular';
-import { default as Topics } from '../Common/topic';
+import { default as Topics } from '../Homestack/HomeTab Components/Topics';
 import { default as RecentlyAdded } from './HomeTab Components/RecentlyAdded';
 import { default as FollowAuthors } from './HomeTab Components/FollowAuthors';
 
