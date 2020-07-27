@@ -17,6 +17,7 @@ import {
     MenuProvider,
     renderers
   } from 'react-native-popup-menu';
+import { Switch } from 'native-base';
 
 let actionPayload;
 
@@ -28,14 +29,6 @@ const IS_IOS = Platform.OS === 'ios';
 const { width, height } = Dimensions.get('window');
 const defaultStyles = getDefaultStyles();
 
-const showToastWithGravity = () => {
-    ToastAndroid.showWithGravity(
-      "BLOG SAVED SUCCESSFULLY",
-      ToastAndroid.LONG,
-      ToastAndroid.BOTTOM
-    );
-  };
-
 class PostEditor extends React.Component {
 
     constructor(props) {
@@ -44,12 +37,12 @@ class PostEditor extends React.Component {
         , title : {fontSize: 20}, ol : {fontSize: 16 }, ul: {fontSize: 16}, bold: {fontSize: 16, fontWeight: 'bold', color: 'black'}
         };  
         this.state = {
-            BlogTitle: props.route.params.BlogTitle,
-            BlogCategory: props.route.params.BlogCategory,
-            BlogLanguage: props.route.params.BlogLanguage,
-            BlogDescription: props.route.params.BlogDescription,
-            BlogImage: props.route.params.BlogImage,
-            BlogContent: '',
+            Title: props.route.params.Title,
+            Category: props.route.params.Category,
+            Language: props.route.params.Language,
+            Description: props.route.params.Description,
+            Image: props.route.params.Image,
+            Content: '',
             selectedTag : 'body',
             selectedColor : 'default',
             selectedHighlight: 'default',
@@ -68,7 +61,7 @@ class PostEditor extends React.Component {
 
     componentDidMount(){
         this.props.navigation.setOptions({
-            title: this.state.BlogTitle,
+            title: this.state.Title,
             headerRight: () => <Button
             onPress={() => this.rendernavigation()}
             title="SAVE"
@@ -78,10 +71,18 @@ class PostEditor extends React.Component {
 
     }
 
+    showToastWithGravity(){
+        ToastAndroid.showWithGravity(
+          "SAVED SUCCESSFULLY",
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM
+        );
+      };
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.data) {
           //console.log("Recieved data")
-          showToastWithGravity();
+          this.showToastWithGravity();
           this.props.navigation.navigate('Homestack');
         }   
       }
@@ -90,18 +91,34 @@ class PostEditor extends React.Component {
        // console.log("Value: ", this.state.value)
         var finalvalue = this.state.value;
         
-        //console.log("Final Blog Content: ",this.state.BlogContent)
+        //console.log("Final Blog Content: ",this.state.Content)
         var body = {};
-        body['blog_title'] = this.state.BlogTitle
-        body['blog_image'] = this.state.BlogImage
-        body['blog_text'] = this.state.BlogDescription
-        body['category_id'] = this.state.BlogCategory.trim()
-        body['language_id'] = this.state.BlogLanguage.trim()
-        body['blog_content'] = convertToHtmlString(finalvalue)
+        var routename;
+        switch(this.props.route.params.blog_story) {
+            case true:
+                body['blog_title'] = this.state.Title
+                body['blog_image'] = this.state.Image
+                body['blog_text'] = this.state.Description
+                body['blog_content'] = convertToHtmlString(finalvalue)
+                routename='blogs'
+            break;
+            case false:
+                body['story_title'] = this.state.Title
+                body['story_image'] = this.state.Image
+                body['story_text'] = this.state.Description
+                body['story_content'] = convertToHtmlString(finalvalue)
+                routename='stories'
+            break;
+            default:
+                console.log('Ideally it should not enter this case')
+        }
+
+        body['category_id'] = this.state.Category.trim()
+        body['language_id'] = this.state.Language.trim()
         body['created_on'] = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
 
         actionPayload = {
-            route: 'blogs',
+            route: routename,
             data: body,
             token: this.props.token,
             image: true

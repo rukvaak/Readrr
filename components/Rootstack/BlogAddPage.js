@@ -210,11 +210,12 @@ class BlogAddPage extends React.Component {
 
   rendernavigation() {
     //console.log("categoryinput",this.state.categoryinput)
-    this.props.navigation.navigate('PostEditor', {  BlogTitle: this.state.titleinput,
-                                                    BlogCategory: this.state.categoryinput,
-                                                    BlogLanguage: this.state.languageinput,
-                                                    BlogImage: this.state.postinsertimage,
-                                                    BlogDescription: this.state.descriptioninput
+    this.props.navigation.navigate('PostEditor', {  Title: this.state.titleinput,
+                                                    Category: this.state.categoryinput,
+                                                    Language: this.state.languageinput,
+                                                    Image: this.state.postinsertimage,
+                                                    Description: this.state.descriptioninput,
+                                                    blog_story: true
     });
   }
 

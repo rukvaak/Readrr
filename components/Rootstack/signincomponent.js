@@ -28,7 +28,7 @@ class SigninScreen extends ValidationComponent {
   };
   constructor(props) {
     super(props);
-    this.state = { name: "pavan2322@gmail.com", pass: "boson23232", checked: false };
+    this.state = { name: "Rukvaak1223@gmail.com", pass: "boson23232", checked: false };
   }
 
   state = {

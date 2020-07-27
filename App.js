@@ -16,6 +16,7 @@ import Webview from './components/Rootstack/Webview';
 import Blogpage from './components/Rootstack/BlogPage';
 import BlogAddpage from './components/Rootstack/BlogAddPage';
 import QuoteAddpage from './components/Rootstack/QuoteAddpage';
+import StoryAddPage from './components/Rootstack/StoryAddPage';
 import PostEditor from './components/Rootstack/PostEditor';
 
 import HomePage_Viewall from './components/Homestack/HomeTab Components/ViewAll Components/HomePage_Viewall';
@@ -166,6 +167,7 @@ class Rootstack extends React.Component{
         }}/>
         <Stack.Screen name="HomePage_Viewall" component={HomePage_Viewall} />
         <Stack.Screen name="Topics_ViewAll" component={Topics_ViewAll} />
+        <Stack.Screen name="StoryAddPage" component={StoryAddPage}/>
         <Stack.Screen name="Homestack" component={Homestack} />
       </Stack.Navigator>
     </NavigationContainer>

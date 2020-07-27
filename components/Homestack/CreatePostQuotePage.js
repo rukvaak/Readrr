@@ -105,7 +105,7 @@ class CreatePostQuotePage extends React.Component {
             this.props.navigation.navigate('QuoteAddpage');
         } 
         else if (index === 2){
-            this.props.navigation.navigate('QuoteAddpage');
+            this.props.navigation.navigate('StoryAddPage');
         }       
     }
 

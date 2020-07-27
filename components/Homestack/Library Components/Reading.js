@@ -1,52 +1,77 @@
 import React from 'react';
-import { Dimensions,StyleSheet,View,FlatList,ScrollView} from 'react-native';
+import { Dimensions, StyleSheet, View, FlatList, ScrollView, TouchableOpacity } from 'react-native';
 import { Card, Image, Rating } from 'react-native-elements';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import {Button,Text} from 'native-base';
 
-import { default as ProgressBar} from '../../Common/ProgressBar';
+import { default as ImageComponent } from '../../Common/ImageComponent';
+import { default as TitleandAuthor } from '../../Common/TitleandAuthor';
+import { default as RatingComponent } from '../../Common/Rating';
 
-const { width: screenWidth } = Dimensions.get('window');
+import { getRequest } from '../../../Services/data-service';
+import { connect } from 'react-redux';
+let actionPayload;
 
-const Data=[
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+
+const Data = [
   {
-    id:"1",
-    image:require('../../../assets/EmileZola.jpg'),
+    id: "1",
+    image: require('../../../assets/EmileZola.jpg'),
     title: "The Disappearance of Emile Zola",
     Author: "Michael Rosen"
   },
   {
-    id:"2",
-    image:require('../../../assets/Fatherhood.jpg'),
+    id: "2",
+    image: require('../../../assets/Fatherhood.jpg'),
     title: "FatherHood: The Truth",
     Author: "Marcus Berkmann"
   },
   {
-    id:"3",
-    image:require('../../../assets/Time-Travellers.jpg'),
+    id: "3",
+    image: require('../../../assets/Time-Travellers.jpg'),
     title: "The Time-Travellers Handbook",
     Author: "Lottie Stride"
   },
 ]
 
-class Reading extends React.Component{
+class Reading extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-       header: () => null
-    } 
-}
-  constructor(props){
+      header: () => null
+    }
+  }
+  constructor(props) {
     super(props);
   }
-  
+
   state = {
     data: {},
+    stories: {},
     loading: true
   }
 
-  componentWillReceiveProps(){
-    this.setState({data: this.props.data})
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data.StoriesData) {
+      console.log('StoriesDataAAAAAAAAAAAAAAAAAAAAAAAA', nextProps.data.StoriesData)
+      this.setState({
+        stories: nextProps.data.StoriesData
+      })
+    }
+
+  }
+
+  componentWillMount() {
+    var body = {};
+    var routename;
+    body["event"] = "StoriesData";
+    routename = 'stories';
+    actionPayload = {
+      route: routename,
+      body: body,
+      token: this.props.token //token is mandatory
+    }
+    this.props.onRequestUpdate();
   }
 
   async componentDidMount() {
@@ -58,86 +83,104 @@ class Reading extends React.Component{
     this.setState({ loading: false })
   }
 
-  render(){
+  render() {
     if (this.state.loading) {
       return (
         <View></View>
       );
     }
-        return(
-            <View style={styles.screen}>
-              <Text>{"\n"}</Text>
-              <FlatList
-                horizontal
-                pagingEnabled={true}
-                showsHorizontalScrollIndicator={false}
-                data={Data}
-                renderItem={({item})=>
-                    <View style={styles.item}>
-                      <Image style={styles.image} containerStyle={styles.imageContainer} source={item.image}/> 
-                      <Text style={styles.title}>
-                      {item.title } 
-                      {/* {this.state.data.title} */}
-                      </Text>
-                      <Text style={styles.subtitle}>
-                      {"By "+item.Author } 
-                      {/* {this.state.data.title} */}
-                      </Text>
-                    </View>       
-                }
-              />
+    return(
+      // <View style={styles.screen}>
+        <FlatList
+          pagingEnabled={true}
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          data={this.state.stories}
+          columnWrapperStyle={styles.row}
+          renderItem={({item})=>
+          <TouchableOpacity activeOpacity={0.5} 
+          onPress={() => RootNavigation.navigate('Blogpage',{ story_id: item._id})}>
+                  <View style={styles.item}>
+                      <ImageComponent image={item.story_image} /> 
+                      <TitleandAuthor title={item.story_title} author={item.story_author} />
+                      <RatingComponent rating={item.story_rating}/>
+                  </View>  
+              </TouchableOpacity>     
+          }
+        />
 
-            </View>
+      // </View>
 
-         
-        );
-    }
+   
+  );
   }
+}
 
 
 
 const styles = StyleSheet.create({
-screen: {
+  screen: {
     flex:1,
-    flexDirection: 'column',
     top: 0,
     left: 0,
     bottom: 0,
     right: 0
 },
-TextBold:{
-  fontSize:20,
-  fontWeight:"bold",
-  paddingLeft:20
+row: {
+  justifyContent: "space-around"
 },
-imageContainer: {
-  flex: 1,
-  marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-  borderRadius: 20
-},
-item: {
-  width: screenWidth - 180,
-  height: screenWidth
-},
-image:{
-  ...StyleSheet.absoluteFillObject,
-  resizeMode: 'contain',
-  borderRadius: 10
- },
-title: {
-    fontSize: 20, 
+  TextBold: {
+    fontSize: 20,
+    fontWeight: "bold",
+    paddingLeft: 20
+  },
+  imageContainer: {
+    flex: 1,
+    marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+    borderRadius: 20
+  },
+  item: {
+    width: (screenWidth * 45) / 100,
+    height: (screenHeight * 35) / 100
+  },
+  image: {
+    ...StyleSheet.absoluteFillObject,
+    resizeMode: 'contain',
+    borderRadius: 10
+  },
+  title: {
+    fontSize: 20,
     fontWeight: 'bold',
     justifyContent: 'center',
     alignSelf: 'center',
     textAlign: 'center'
-},
-subtitle: {
+  },
+  subtitle: {
     fontSize: 14,
     color: 'grey',
     justifyContent: 'center',
     alignSelf: 'center'
-}
+  }
 }
 );
 
-export default Reading;
+
+const mapStateToProps = (state, props) => {
+  return {
+    store: state.store,
+    loading: true,
+    data: state.items,
+    token: state.token
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onRequestUpdate: () => dispatch(getRequest(actionPayload))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Reading);
