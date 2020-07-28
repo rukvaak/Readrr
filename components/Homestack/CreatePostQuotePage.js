@@ -51,12 +51,12 @@ class CreatePostQuotePage extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.data.MyBlogsData) {
-            console.log('MyBlogsDataAAAAAAAAAAAAAAAAAAAAAAAA', nextProps.data.MyBlogsData)
+            //console.log('MyBlogsDataAAAAAAAAAAAAAAAAAAAAAAAA', nextProps.data.MyBlogsData)
             this.setState({
                 editblogs: nextProps.data.MyBlogsData
             })
         } else if (nextProps.data.MyQuotesData) {
-            console.log('MyBlogsDataAAAAAAAAAAAAAAAAAAAAAAAA', nextProps.data.MyQuotesData)
+            //console.log('MyBlogsDataAAAAAAAAAAAAAAAAAAAAAAAA', nextProps.data.MyQuotesData)
             this.setState({
                 editquotes: nextProps.data.MyQuotesData
             })

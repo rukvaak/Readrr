@@ -127,7 +127,7 @@ class BlogPage extends React.Component {
   }
 
   rendernavigation() {
-    this.props.navigation.navigate('Webview',{blog_content: this.state.blogs.blog_content });
+    this.props.navigation.navigate('Webview',{content: this.state.blogs.blog_content });
   }
 
   render() {

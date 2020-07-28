@@ -14,6 +14,7 @@ import CategoriesPage from './components/Rootstack/categories';
 import { createStore, applyMiddleware, compose } from 'redux';
 import Webview from './components/Rootstack/Webview';
 import Blogpage from './components/Rootstack/BlogPage';
+import Storypage from './components/Rootstack/storyPage';
 import BlogAddpage from './components/Rootstack/BlogAddPage';
 import QuoteAddpage from './components/Rootstack/QuoteAddpage';
 import StoryAddPage from './components/Rootstack/StoryAddPage';
@@ -153,6 +154,7 @@ class Rootstack extends React.Component{
         <Stack.Screen name="Categories" component={CategoriesPage} />
         <Stack.Screen name="Webview" component={Webview} />
         <Stack.Screen name="Blogpage" component={Blogpage} />
+        <Stack.Screen name="Storypage" component={Storypage} />
         <Stack.Screen name="BlogAddpage" component={BlogAddpage} />
         <Stack.Screen name="QuoteAddpage" component={QuoteAddpage} />
         <Stack.Screen name="PostEditor" component={PostEditor} options={{

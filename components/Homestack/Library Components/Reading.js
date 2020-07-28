@@ -8,32 +8,13 @@ import { default as ImageComponent } from '../../Common/ImageComponent';
 import { default as TitleandAuthor } from '../../Common/TitleandAuthor';
 import { default as RatingComponent } from '../../Common/Rating';
 
+import * as RootNavigation from '../../../RootNavigation.js';
+
 import { getRequest } from '../../../Services/data-service';
 import { connect } from 'react-redux';
 let actionPayload;
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
-
-const Data = [
-  {
-    id: "1",
-    image: require('../../../assets/EmileZola.jpg'),
-    title: "The Disappearance of Emile Zola",
-    Author: "Michael Rosen"
-  },
-  {
-    id: "2",
-    image: require('../../../assets/Fatherhood.jpg'),
-    title: "FatherHood: The Truth",
-    Author: "Marcus Berkmann"
-  },
-  {
-    id: "3",
-    image: require('../../../assets/Time-Travellers.jpg'),
-    title: "The Time-Travellers Handbook",
-    Author: "Lottie Stride"
-  },
-]
 
 class Reading extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -47,13 +28,14 @@ class Reading extends React.Component {
 
   state = {
     data: {},
-    stories: {},
+    stories: [],
+    story: [],
     loading: true
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.data.StoriesData) {
-      console.log('StoriesDataAAAAAAAAAAAAAAAAAAAAAAAA', nextProps.data.StoriesData)
+      //console.log('StoriesDataAAAAAAAAAAAAAAAAAAAAAAAA', nextProps.data.StoriesData)
       this.setState({
         stories: nextProps.data.StoriesData
       })
@@ -99,7 +81,7 @@ class Reading extends React.Component {
           columnWrapperStyle={styles.row}
           renderItem={({item})=>
           <TouchableOpacity activeOpacity={0.5} 
-          onPress={() => RootNavigation.navigate('Blogpage',{ story_id: item._id})}>
+          onPress={() => RootNavigation.navigate('Storypage',{ story_id: item._id})}>
                   <View style={styles.item}>
                       <ImageComponent image={item.story_image} /> 
                       <TitleandAuthor title={item.story_title} author={item.story_author} />
