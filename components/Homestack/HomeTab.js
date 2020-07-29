@@ -42,10 +42,10 @@ class HomeTab extends React.Component {
     loading: true,
     data: [],
     avatar: '',
-    our_picks: {},
-    most_popular: {},
-    recently_added: {},
-    you_may_like: {},
+    our_picks: [],
+    most_popular: [],
+    recently_added: [],
+    you_may_like: [],
     topics: [],
     authors: []
   }

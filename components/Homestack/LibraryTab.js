@@ -46,7 +46,8 @@ const Data = [
 class MyTabs extends React.Component {
   render() {
     return (
-      <Tabs locked renderTabBar={() => <ScrollableTab />}>
+      // <Tabs locked renderTabBar={() => <ScrollableTab />}>
+      <Tabs locked >
         <Tab heading={
           <TabHeading>
             <MaterialIcons name="local-library" size={18} color="white" />

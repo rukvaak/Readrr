@@ -34,7 +34,7 @@ class Topics extends React.Component {
           renderItem={({ item }) =>
           <TouchableOpacity activeOpacity={0.5} 
             onPress={() => RootNavigation.navigate('Topics_ViewAll', {topictitle: 'TopicBlogs', topic_id: item._id})}>
-          <View style={{ borderWidth: 5, borderColor: "#ffffff", borderLeftColor: "#ffffff", overflow: 'hidden', borderRadius: 20 }}>
+          <View style={{ borderWidth: 5, borderColor: "#ffffff", borderLeftColor: "#ffffff", overflow: 'hidden', borderRadius: 20, marginHorizontal: 5 }}>
               <ImageBackground source={{ uri: ipconfig.ipConfig.ipaddress + ':3002?url=' + item.category_image }} style={{ height: 200, width: 175, flex: 1 }}>
                   <Text style={styles.innerText}>
                       {item.category_name}

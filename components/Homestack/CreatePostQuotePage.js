@@ -5,6 +5,8 @@ import * as Font from 'expo-font';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Text } from 'native-base';
 
+import * as RootNavigation from '../../RootNavigation.js';
+
 import { getRequest } from '../../Services/data-service';
 import { connect } from 'react-redux';
 const ipconfig = require('../../Services/config');;
@@ -46,6 +48,7 @@ class CreatePostQuotePage extends React.Component {
         create: Create,
         editblogs: {},
         editquotes: {},
+        editstories: {},
         loading: true
     }
 
@@ -59,6 +62,11 @@ class CreatePostQuotePage extends React.Component {
             //console.log('MyBlogsDataAAAAAAAAAAAAAAAAAAAAAAAA', nextProps.data.MyQuotesData)
             this.setState({
                 editquotes: nextProps.data.MyQuotesData
+            })
+        } else if (nextProps.data.MyStoriesData) {
+            //console.log('MyBlogsDataAAAAAAAAAAAAAAAAAAAAAAAA', nextProps.data.MyQuotesData)
+            this.setState({
+                editstories: nextProps.data.MyStoriesData
             })
         }
 
@@ -78,13 +86,23 @@ class CreatePostQuotePage extends React.Component {
 
         body = {};
         body["event"] = "MyQuotes";
-            routename = 'quotes';
+        routename = 'quotes';
         actionPayload = {
             route: routename,
             body: body,
             token: this.props.token //token is mandatory
         }
         this.props.onRequestQuotesUpdate();
+
+        body = {};
+        body["event"] = "MyStories";
+        routename = 'stories';
+        actionPayload = {
+            route: routename,
+            body: body,
+            token: this.props.token //token is mandatory
+        }
+        this.props.onRequestStoriesUpdate();
     }
 
 
@@ -162,6 +180,27 @@ class CreatePostQuotePage extends React.Component {
         );
     }
 
+    renderStoriesEdit({ item, index }) {
+        let checked;
+        return (
+            <TouchableOpacity activeOpacity={0.5}
+                        onPress={() => RootNavigation.navigate('Storypage',{ story_id: item._id})}>
+            <View style={styles.edit}>
+                <Text style={styles.postdate}>
+                    {moment(item.created_on).format("DD MMMM,YYYY")}
+                </Text>
+                <Text style={styles.posttitle}>
+                    {item.story_title}
+                </Text>
+                <Text style={styles.postdate}>
+                    {}
+                </Text>
+            </View>
+            </TouchableOpacity>
+
+        );
+    }
+
     render() {
         if (this.state.loading) {
             return (
@@ -200,6 +239,17 @@ class CreatePostQuotePage extends React.Component {
                         data={this.state.editquotes}
                         keyExtractor={(item, index) => item._id}
                         renderItem={this.renderQuotesEdit}
+                    />
+                    <Text style={styles.sectionheading}>
+                        My Stories
+                    </Text>
+                    <FlatList
+                        numColumns={2}                  // set number of columns 
+                        columnWrapperStyle={styles.row}  // space them out evenly
+
+                        data={this.state.editstories}
+                        keyExtractor={(item, index) => item._id}
+                        renderItem={this.renderStoriesEdit}
                     />
                 </ScrollView>
             </View>
@@ -290,7 +340,8 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = dispatch => {
     return {
         onRequestUpdate: () => dispatch(getRequest(actionPayload)),
-        onRequestQuotesUpdate: () => dispatch(getRequest(actionPayload))
+        onRequestQuotesUpdate: () => dispatch(getRequest(actionPayload)),
+        onRequestStoriesUpdate: () => dispatch(getRequest(actionPayload))
     };
 };
 

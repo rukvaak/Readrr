@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, StyleSheet, View, FlatList, ScrollView, TouchableOpacity } from 'react-native';
+import { Dimensions, StyleSheet, View, FlatList, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Card, Image, Rating } from 'react-native-elements';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
@@ -72,7 +72,7 @@ class Reading extends React.Component {
       );
     }
     return(
-      // <View style={styles.screen}>
+      <SafeAreaView style={styles.screen}>
         <FlatList
           pagingEnabled={true}
           showsVerticalScrollIndicator={false}
@@ -91,7 +91,7 @@ class Reading extends React.Component {
           }
         />
 
-      // </View>
+      </SafeAreaView>
 
    
   );
@@ -102,14 +102,17 @@ class Reading extends React.Component {
 
 const styles = StyleSheet.create({
   screen: {
-    flex:1,
+    flex: 1,
+    flexDirection: 'column',
     top: 0,
     left: 0,
     bottom: 0,
-    right: 0
-},
+    right: 0,
+    backgroundColor: '#e6e6e6'
+  },
 row: {
-  justifyContent: "space-around"
+  justifyContent: "space-around",
+  margin: 10
 },
   TextBold: {
     fontSize: 20,

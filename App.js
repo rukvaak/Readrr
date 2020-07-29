@@ -31,7 +31,7 @@ import { Provider } from 'react-redux';
 const { width: screenWidth } = Dimensions.get('window');
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import Profile from './components/Common/profilepage';
+import Profile from './components/Homestack/MyProfileTab';
 import HomeTab from './components/Homestack/HomeTab';
 import LibraryTab from './components/Homestack/LibraryTab';
 import FeedTab from './components/Homestack/FeedTab';

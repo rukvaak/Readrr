@@ -51,7 +51,7 @@ class Quotes extends React.Component {
   }
 
   state = {
-    quotes: {},
+    quotes: [],
     author: {},
     like_icon: 'heart-o',
     loading: true
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
     right: 0,
-    backgroundColor: 'grey'
+    backgroundColor: '#e6e6e6'
   },
   TextBold: {
     fontSize: 20,
