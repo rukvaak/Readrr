@@ -18,27 +18,6 @@ let actionPayload;
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-const Data = [
-  {
-    id: "1",
-    image: require('../../../assets/EmileZola.jpg'),
-    title: "The Disappearance of Emile Zola",
-    Author: "Michael Rosen"
-  },
-  {
-    id: "2",
-    image: require('../../../assets/Fatherhood.jpg'),
-    title: "FatherHood: The Truth",
-    Author: "Marcus Berkmann"
-  },
-  {
-    id: "3",
-    image: require('../../../assets/Time-Travellers.jpg'),
-    title: "The Time-Travellers Handbook",
-    Author: "Lottie Stride"
-  },
-]
-
 class Quotes extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -52,26 +31,19 @@ class Quotes extends React.Component {
 
   state = {
     quotes: [],
-    author: {},
-    like_icon: 'heart-o',
     loading: true
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.data.quoteData) {
-      let user_data = {};
-      user_data['user_id'] = (nextProps.data.quoteData[0].user_id);
-      user_data['user_name'] = (nextProps.data.quoteData[0].user_name);
-      user_data['user_profile_pic'] = (nextProps.data.quoteData[0].user_profile_pic);
       //console.log('qqqqqqqqqquuuuuuuuuoooooooootes:', user_data)
       this.setState({
-        quotes: nextProps.data.quoteData,
-        author: user_data
+        quotes: nextProps.data.quoteData
       })
     } else if (nextProps.data.quotelikes) {
       //("Recieved data")
       showToastWithGravity();
-      this.props.navigation.navigate('Homestack');
+      //this.props.navigation.navigate('Homestack');
     }   
   }
 
@@ -98,17 +70,20 @@ class Quotes extends React.Component {
   }
 
   postlike(item) {
-    item.like_icon === 'heart' ?  item.like_icon = 'heart-o' : item.like_icon = 'heart'
-    if (item.like_icon === 'heart' ) {
-      item.quotes_likes++
-    } else if(item.like_icon === 'heart-o' ) {
+    //item.like_icon === 'heart' ?  item.like_icon = 'heart-o' : item.like_icon = 'heart'
+    if (item.user_present) {
       item.quotes_likes--
+     item.user_present = false
+    } else {
+      item.quotes_likes++
+      item.user_present = true
     } 
 
     var body = {};
     body["event"] = "quoteLikeupdate"
     body["quote_id"] = item._id
-    body['quote_likes'] = item.quotes_likes
+    // body['quote_likes'] = item.quotes_likes
+    body['like_dislike'] = item.user_present
     actionPayload = {
       route: 'quotes',
       data: body,
@@ -136,13 +111,17 @@ class Quotes extends React.Component {
               imageStyle={{ height: screenHeight / 3 }}
               imageProps={{ resizeMode: 'contain' }}
               containerStyle={{justifyContent: 'flex-start'}}>
-              <AvatarVertical author={this.state.author} bottomDivider={false} />
+              <AvatarVertical author={{ user_id: item.user_id, 
+                                        user_profile_pic: item.user_profile_pic , 
+                                        user_name: item.user_name}} 
+                              bottomDivider={false} 
+              />
               <Divider style={styles.Divider} />
               <Icon
                 raised={false}
-                name={item.like_icon === undefined ? 'heart-o' : item.like_icon}
+                name={item.user_present? 'heart' : 'heart-o'}
                 type='font-awesome'
-                color='grey'
+                color={item.user_present? 'red' : 'grey'}
                 size={30}
                 onPress={() => this.postlike(item)} />
               <Text style={{ textAlign: 'center' }}>

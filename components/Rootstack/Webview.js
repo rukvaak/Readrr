@@ -1,11 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Picker, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Button, Picker, ScrollView, Dimensions, BackHandler, Alert } from 'react-native';
 import { Slider } from 'react-native-elements';
 import ReadabilityWebView from "react-native-webview-readability";
 import HTMLView from 'react-native-htmlview';
 import SwipeablePanel from "rn-swipeable-panel";
 import { Dropdown } from "react-native-material-dropdown";
 import { block } from 'react-native-reanimated';
+
+import * as RootNavigation from '../../RootNavigation.js';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -18,6 +20,8 @@ export default class Webview extends React.Component {
   state = {
     swipeablePanelActive: false,
     content: this.props.route.params.content,
+    blog_story: this.props.route.params.blog_story,
+    _id: this.props.route.params._id,
     font: 'Roboto',
     fontsize: 20
   }
@@ -61,7 +65,9 @@ export default class Webview extends React.Component {
     this.setState({ loading: false })
 
     this.props.navigation.setOptions({
-      title: this.state.titleinput,
+      // header: null,
+      headerLeft : null
+      //title: this.state.titleinput,
       /* headerRight: () => <Button
       onPress={() => this.rendernavigation()}
       title="SAVE"
@@ -71,10 +77,29 @@ export default class Webview extends React.Component {
     this.closePanel();
   }
 
-  /* componentDidMount = () => {
-      this.closePanel();
+  componentDidMount() {
+    this.props.navigation.setOptions({
+      headerLeft : null
+      //title: this.state.titleinput,
+      /* headerRight: () => <Button
+      onPress={() => this.rendernavigation()}
+      title="SAVE"
+      color="#000000"
+    /> */
+    })
+    this.closePanel();
+    BackHandler.addEventListener("hardwareBackPress", this.backAction);
+  }
+
+  backAction = () => {
+    RootNavigation.navigate('RateBlogs', {blog_story: this.state.blog_story, _id: this.state._id})
+    return true;
   };
-*/
+
+   componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.backAction);
+  }
+
   openPanel = () => {
     this.setState({ swipeablePanelActive: true });
   };
@@ -82,6 +107,7 @@ export default class Webview extends React.Component {
   closePanel = () => {
     this.setState({ swipeablePanelActive: false });
   };
+
 
   render() {
     let fontvalue = [
@@ -171,14 +197,14 @@ export default class Webview extends React.Component {
                 fontFamily: this.state.font,
                 fontWeight: 'bold',
                 textAlign: 'center',
-                margin : '0px !important'
+                margin: '0px !important'
               },
               span: {
                 fontSize: this.state.fontsize,
                 fontFamily: this.state.font,
                 fontWeight: 'bold',
                 textAlign: 'center',
-                margin : '0px !important'
+                margin: '0px !important'
               },
               img: {
                 width: 100,

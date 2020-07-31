@@ -118,7 +118,9 @@ class Storypage extends React.Component {
   }
 
   rendernavigation() {
-    this.props.navigation.navigate('Webview',{content: this.state.stories.story_content });
+    this.props.navigation.navigate('Webview',{  content: this.state.stories.story_content,
+                                                _id: this.props.route.params.story_id, 
+                                                blog_story: false });
   }
 
   render() {

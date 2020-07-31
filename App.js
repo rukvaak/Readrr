@@ -19,6 +19,7 @@ import BlogAddpage from './components/Rootstack/BlogAddPage';
 import QuoteAddpage from './components/Rootstack/QuoteAddpage';
 import StoryAddPage from './components/Rootstack/StoryAddPage';
 import PostEditor from './components/Rootstack/PostEditor';
+import RateBlogs from './components/Rootstack/rateblogs';
 
 import HomePage_Viewall from './components/Homestack/HomeTab Components/ViewAll Components/HomePage_Viewall';
 import Topics_ViewAll from './components/Homestack/HomeTab Components/ViewAll Components/Topics_ViewAll';
@@ -35,7 +36,7 @@ import Profile from './components/Homestack/MyProfileTab';
 import HomeTab from './components/Homestack/HomeTab';
 import LibraryTab from './components/Homestack/LibraryTab';
 import FeedTab from './components/Homestack/FeedTab';
-import ChatTab from './components/Homestack/ChatTab';
+import SearchTab from './components/Homestack/SearchTab';
 import CreatePostQuotePage from './components/Homestack/CreatePostQuotePage';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -116,12 +117,12 @@ class Homestack extends React.Component{
         }}
       />
       <Tab.Screen
-        name="Chat"
-        component={ChatTab}
+        name="Search"
+        component={SearchTab}
         options={{
-          tabBarLabel: 'Chat',
+          tabBarLabel: 'Search',
           tabBarIcon: ({ color, size }) => (
-            <Icon name="message" color={color} size={size} />
+            <Icon name="search" color={color} size={size} />
           ),
         }}
       />
@@ -170,6 +171,7 @@ class Rootstack extends React.Component{
         <Stack.Screen name="HomePage_Viewall" component={HomePage_Viewall} />
         <Stack.Screen name="Topics_ViewAll" component={Topics_ViewAll} />
         <Stack.Screen name="StoryAddPage" component={StoryAddPage}/>
+        <Stack.Screen name="RateBlogs" component={RateBlogs}/>
         <Stack.Screen name="Homestack" component={Homestack} />
       </Stack.Navigator>
     </NavigationContainer>
