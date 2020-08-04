@@ -26,7 +26,7 @@ export const receivedPosts = json => ({
 			dispatch(receivedPosts(json));
 		  },
 		).catch(err=>{
-			console.log(err);
+			console.log('someerror in post request'/* err */);
 		})
 	  };
   }
@@ -41,7 +41,7 @@ export const receivedPosts = json => ({
 			dispatch(receivedPosts(json));
 		  },
 		).catch(err=>{
-			console.log(err);
+			console.log('someerror in get request'/* err */);
 		})
 	  };
   }

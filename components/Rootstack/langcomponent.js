@@ -55,6 +55,7 @@ class LanguageScreen extends React.Component {
     })
     this.setState({ loading: false })
   }
+  
   renderCategories() {
     if (this.state.selectedlanguage.length > 0) {
       this.props.navigation.navigate('Categories', {selectedlanguage: this.state.selectedlanguage});
@@ -103,7 +104,7 @@ class LanguageScreen extends React.Component {
         <View style={{ flex: 1 }}>
           <ImageBackground source={require('../../assets/lang.png')} style={styles.background} />
           <Text style={styles.select}>Please Choose your language</Text>
-          <Grid style={{ flex: 0.6 }}>
+          <Grid style={{ flex: 0.4 }}>
             <Row>
             <Col >
               <FlatList

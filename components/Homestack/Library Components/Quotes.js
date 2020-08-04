@@ -113,7 +113,8 @@ class Quotes extends React.Component {
               containerStyle={{justifyContent: 'flex-start'}}>
               <AvatarVertical author={{ user_id: item.user_id, 
                                         user_profile_pic: item.user_profile_pic , 
-                                        user_name: item.user_name}} 
+                                        user_name: item.user_name,
+                                        quotes_props_flag: true}} 
                               bottomDivider={false} 
               />
               <Divider style={styles.Divider} />

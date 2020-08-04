@@ -104,7 +104,7 @@ class FeedTab extends Component {
 
         ImgToBase64.getBase64String(url)
         .then(base64String => console.log('Image Base 64 conversion successful',))
-        .catch(err => console.log('Image Base 64: ', err));
+        .catch(err => console.log('Image Base 64: '/* , err */));
 
         /* fileToBase64("test.pdf", "../files/test.pdf").then(result => {this.editor.insertImage(result)}); */
         /* console.log('Image Base 64: ', fileToBase64("Image", ).then(result => {this.editor.insertImage(result)}) ) */

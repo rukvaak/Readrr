@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, Text, View, Image, Button } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, Image, Button, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 import {  Container, Content, Header, Left, Body, Right, Title, Footer, FooterTab } from 'native-base';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from '@react-navigation/stack';
 import { navigationRef } from './RootNavigation';
+
+import * as RootNavigation from './RootNavigation.js';
 
 import LoginScreen from './components/Rootstack/logincomponent';
 import SigninScreen from './components/Rootstack/signincomponent';
@@ -27,9 +29,7 @@ import Topics_ViewAll from './components/Homestack/HomeTab Components/ViewAll Co
 import reducer from './Services/Reducer/reducer'
 import dataService from './Services/data-service'
 import thunk from 'redux-thunk'
-const store = createStore(reducer, applyMiddleware(thunk));
 import { Provider } from 'react-redux';
-const { width: screenWidth } = Dimensions.get('window');
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import Profile from './components/Homestack/MyProfileTab';
@@ -40,11 +40,35 @@ import SearchTab from './components/Homestack/SearchTab';
 import CreatePostQuotePage from './components/Homestack/CreatePostQuotePage';
 import { NavigationContainer } from '@react-navigation/native';
 
+const store = createStore(reducer, applyMiddleware(thunk));
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const Tab = createMaterialTopTabNavigator();
 
 console.disableYellowBox = true;
 
 class Homestack extends React.Component{
+
+  
+  componentDidMount() {
+    this.props.navigation.setOptions({
+      title: null,
+      // headerTitleStyle: {alignSelf: 'center', fontSize: 26, fontWeight: 'bold' , paddingLeft: 30},
+      headerStyle: {backgroundColor: "#f7931e" },
+      headerLeftStyle: {paddingLeft: 30},
+      headerLeft: () => (
+        <View style={{ flexDirection: 'row', paddingLeft: 10 }}>
+          <TouchableOpacity onPress={() => RootNavigation.navigate('Homestack', { screen: 'Feed' })}>
+            <Image
+              source={require('./assets/Readrr-logo.png')}
+              style={{ width: (screenWidth*25)/100, height: (screenHeight*20)/100, resizeMode: 'center'}}
+            />
+          </TouchableOpacity>
+        </View>
+      ),
+    })
+  }
+
+
   render(){
   return (
     <Tab.Navigator
@@ -54,19 +78,6 @@ class Homestack extends React.Component{
       swipeEnabled={false}
       backBehavior='none'
       tabBarVisible={true}
-      options={() => ({
-        headerTitle: 'Readrr',
-        headerLeft: () => (
-          <View style={{ flexDirection: 'row' }}>
-            <Button transparent vertical active={true} /* onPress={() => this.props.navigation.navigate('Main')} */>
-              <Image
-                source={require('./assets/Readrr-logo.png')}
-                style={{ width: screenWidth - 320, height: screenWidth - 320 }}
-              />
-            </Button>
-          </View>
-        ),
-      })}
       tabBarOptions={{
         labelStyle: { fontSize: 12 },
         activeTintColor: '#ffffff',
@@ -151,7 +162,7 @@ class Rootstack extends React.Component{
         <Stack.Screen options={{ headerShown: false, }} name="Login" component={LoginScreen} />
         <Stack.Screen name="Signin" component={SigninScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
-        <Stack.Screen name="Language" component={LanguageScreen} />
+        <Stack.Screen options={{ headerShown: false, }} name="Language" component={LanguageScreen} />
         <Stack.Screen name="Categories" component={CategoriesPage} />
         <Stack.Screen name="Webview" component={Webview} />
         <Stack.Screen name="Blogpage" component={Blogpage} />

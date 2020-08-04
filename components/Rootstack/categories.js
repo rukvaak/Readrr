@@ -46,6 +46,15 @@ class CategoriesPage extends React.Component {
 
 
     }
+    
+    componentDidMount() {
+        this.props.navigation.setOptions({
+          headerLeft : null,
+          title: "Please select the Category",
+          headerTitleStyle: {alignSelf: 'center'}
+        })
+      }
+
     componentWillMount() {
         actionPayload = {
             route: 'categories',
@@ -144,9 +153,9 @@ const style = StyleSheet.create({
     },
     button: {
         justifyContent: 'center',
+        alignSelf: 'center',
         backgroundColor: '#7b0682',
         width: "70%",
-        marginLeft: "12%",
         borderRadius: 24,
         marginTop: "3%",
         margin: 20

@@ -46,9 +46,6 @@ export default class SignupScreen extends ValidationComponent {
   onePressed() {
 
     this.setState({ checked: !this.state.checked });
-
-
-
   }
   register() {
     var validated = this.validate({
@@ -91,6 +88,12 @@ export default class SignupScreen extends ValidationComponent {
       ...Ionicons.font,
     })
     this.setState({ loading: false })
+  }
+
+  componentDidMount() {
+    this.props.navigation.setOptions({
+      headerShown : null
+    })
   }
 
   renderImageSelector() {
@@ -173,13 +176,12 @@ export default class SignupScreen extends ValidationComponent {
     return (
 
       <Container>
+        <Content style={styles.content}>
         <View>
-          <Text style={{ fontSize: 30, fontWeight: "bold", margin: 10 }}>
+          <Text style={{ fontSize: 30, fontWeight: "bold", marginHorizontal: 20, marginVertical: 10 }}>
             Sign Up
           </Text>
         </View>
-
-        <Content style={styles.content}>
           <Form style={styles.form}>
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
               <Text style={styles.textphoto}>
@@ -218,10 +220,10 @@ export default class SignupScreen extends ValidationComponent {
             {!this.state.validate && this.isFieldInError('email') && this.getErrorsInField('email').map(errorMessage => <Text style={{ textAlign: "center", flex: 1, color: "red" }}>{errorMessage.includes("mandatory") ? "Please Enter Email" : "Please Enter valid Email Address"}</Text>)}
             <Item last rounded style={styles.inputfield}>
               <Icon name="lock" size={40} />
-              <Input ref="pass" secureTextEntry={true} onChangeText={(pass) => this.setState({ "pass": pass })} value={this.state.pass} placeholder="Enter the Passwrod" placeholderTextColor="grey" value={this.state.pass} />
+              <Input ref="pass" secureTextEntry={true} onChangeText={(pass) => this.setState({ "pass": pass })} value={this.state.pass} placeholder="Enter the Password" placeholderTextColor="grey" value={this.state.pass} />
             </Item>
             {!this.state.validate && this.isFieldInError('pass') && this.getErrorsInField('pass').map(errorMessage => <Text style={{ textAlign: "center", flex: 1, color: "red" }}>{"Please Enter Password"}</Text>)}
-            <View style={{ flexDirection: 'row', margin: 20 }}>
+            <View style={{ flexDirection: 'row', marginHorizontal: 20, marginTop: 10 }}>
               <CheckBox checked={this.state.checked}
                 onPress={this.onePressed.bind(this)} rounded />
               <Text style={{ textAlign: 'center' }}>Please sign me up to the latest book news and exclusives</Text>
@@ -240,8 +242,8 @@ export default class SignupScreen extends ValidationComponent {
               <Icon name="google" size={40} color="#38A1F3" style={styles.icon} />
             </View>
           </Form>
+          <Text style={{ textAlign: 'center', marginTop: 10 }}>By signing in,creating an account,you agree to our Terms of use and our privacy policy</Text>
         </Content>
-        <Text style={{ textAlign: 'center' }}>By signing in,creating an account,you agree to our Terms of use and our privacy policy</Text>
       </Container>
 
     );
@@ -252,17 +254,16 @@ const styles = StyleSheet.create({
   social: {
     justifyContent: 'center',
     flexDirection: 'row',
-    marginTop: "3%",
+    marginTop: 10,
   },
   or: {
     textAlign: 'center',
-    marginTop: "5%",
-
+    marginTop: 5
   },
   submit: {
     justifyContent: 'center',
     backgroundColor: '#7b0682',
-    margin: 20,
+    marginHorizontal: 20,
     flex: 1,
     flexDirection: "row",
     borderRadius: 24,
@@ -272,7 +273,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   inputfield: {
-    marginTop: "3%",
     justifyContent: 'center',
     marginTop: "3%",
     shadowColor: "#000000",
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
-    paddingVertical: 10
+    marginVertical: 5
   },
   signin: {
     fontSize: 30,
@@ -297,6 +297,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    marginTop: '10%'
   },
   header: {
     backgroundColor: 'rgb(115,0,217)'

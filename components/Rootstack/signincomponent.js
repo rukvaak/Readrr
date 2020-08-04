@@ -15,6 +15,7 @@ import LoginScreen from './logincomponent';
 import { postRequest } from '../../Services/data-service'
 
 import { Directions } from 'react-native-gesture-handler';
+import { HeaderTitle } from '@react-navigation/stack';
 let actionPayload;
 let token;
 class SigninScreen extends ValidationComponent {
@@ -34,15 +35,15 @@ class SigninScreen extends ValidationComponent {
   state = {
     loading: true
   }
-  componentDidMount() {
-    this._loadInitialState.done();
-  }
-  _loadInitialState = async () => {
-    // var value = await AsyncStorage.getItem('user');
-    // if (value !== null){
-    //   this.props.navigation.navigate('Language');
-    // }
-  }
+  // componentDidMount() {
+  //   this._loadInitialState.done();
+  // }
+  // _loadInitialState = async () => {
+  //   // var value = await AsyncStorage.getItem('user');
+  //   // if (value !== null){
+  //   //   this.props.navigation.navigate('Language');
+  //   // }
+  // }
 
   async componentDidMount() {
     await Font.loadAsync({
@@ -66,14 +67,15 @@ class SigninScreen extends ValidationComponent {
         this.props.navigation.navigate('Language');
 
       }
-
-
-
     }
-
-
-
   }
+
+  componentDidMount() {
+    this.props.navigation.setOptions({
+      headerShown : null
+    })
+  }
+
   _onPressButton() {
     this.validate({
       name: { minlength: 3, maxlength: 7, required: true },
@@ -112,23 +114,13 @@ class SigninScreen extends ValidationComponent {
         <View></View>
       );
     }
-    return ([
+    return (
       <Container>
-        <View >
-          <Grid>
-            <Col size={1}>
-            </Col>
-            <Col size={4}>
-              <Text style={{ fontSize: 30, fontWeight: "bold" }}>
-                Sign In
-                    </Text>
-            </Col>
-            <Col size={6}>
-            </Col>
-          </Grid>
-        </View>
         <Content style={styles.content}>
           <Form style={styles.form}>
+            <Text style={{ fontSize: 30, fontWeight: "bold", margin: '5%' }}>
+              Sign In
+            </Text>
             <Item last rounded style={styles.user}>
               <Icon name="user" size={30} color="black" />
               <Input ref="email" onChangeText={(name) => this.setState({ name })} value={this.state.name} placeholder="Enter the Username" placeholderTextColor="grey" />
@@ -156,11 +148,9 @@ class SigninScreen extends ValidationComponent {
             <Icon name="facebook" size={40} color="#4267b2" style={styles.icon} />
             <Icon name="google" size={40} color="#38A1F3" style={styles.icon} />
           </View>
+          <Text style={{ textAlign: 'center' }}>by signing in,creating an account,you agree to our Terms of use and our privacy policy</Text>
         </Content>
-        <Text style={{ textAlign: 'center' }}>by signing in,creating an account,you agree to our Terms of use and our privacy policy</Text>
-      </Container>,
-
-    ]
+      </Container>
 
     );
   }
@@ -175,8 +165,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   form: {
-    justifyContent: 'space-around',
-    marginTop: "25%",
+    marginTop: "35%",
   },
   icon: {
     margin: 10
@@ -186,7 +175,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   user: {
-    marginTop: "3%",
+    marginTop: "5%",
     shadowColor: "#000000",
     shadowOpacity: 0.8,
     shadowRadius: 2,
@@ -198,7 +187,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
     borderWidth: 1,
-    marginTop: "3%"
+    marginTop: "5%"
   },
   body: {
     flexDirection: 'row',
@@ -207,19 +196,18 @@ const styles = StyleSheet.create({
   submit: {
     justifyContent: 'center',
     backgroundColor: '#7b0682',
-    margin: 20,
+    marginHorizontal: 20,
+    marginVertical: 10,
     flex: 1,
     flexDirection: "row",
     borderRadius: 24,
   },
   or: {
-    textAlign: 'center',
-    marginTop: "5%"
+    textAlign: 'center'
   },
   social: {
     justifyContent: 'center',
-    flexDirection: 'row',
-    marginTop: "3%",
+    flexDirection: 'row'
   },
 
 

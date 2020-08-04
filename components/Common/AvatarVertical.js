@@ -11,6 +11,7 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 import { getRequest, postRequest } from '../../Services/data-service';
 import { connect } from 'react-redux';
 let actionPayload;
+var count = 0;
 
 class AvatarVertical extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -27,6 +28,7 @@ class AvatarVertical extends React.Component {
   state = {
     user_present: false,
     bottomDivider: false,
+    blogs_props: true,
     loading: true
   }
 
@@ -42,13 +44,25 @@ class AvatarVertical extends React.Component {
 
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.data.FollowData) {
-      console.log('qqqqqqqqqquuuuuuuuuoooooooootes:', nextProps.data.FollowData[0])
+    var body = {};
+    console.log(count++)
+    if(this.state.blogs_props && this.props.author.blogs_props_flag) {
+      //console.log('bbbbbblooggggsssssss:', nextProps)
+      body["event"] = "FollowData"
+      body["author_id"] = nextProps.author.user_id
+      actionPayload = {
+        route: 'updateuserinfo',
+        body: body,
+        token: this.props.token //token is mandatory
+      }
+      this.props.onRequestUpdate();
+      this.setState({ blogs_props: false });
+    } else if (nextProps.data.FollowData) {
+     // console.log('qqqqqqqqqquuuuuuuuuoooooooootes:', nextProps.data.FollowData[0])
       this.setState({
         user_present: nextProps.data.FollowData[0].user_present
       })
-    } else if (nextProps.data.FollowUnfollowData) {
-      var body = {};
+    } else if (nextProps.data.FollowUnfollowData && nextProps.author.quotes_props_flag) {
       body["event"] = "FollowData"
       body["author_id"] = this.props.author.user_id
       actionPayload = {
@@ -61,16 +75,20 @@ class AvatarVertical extends React.Component {
   }
 
   componentWillMount() {
-    var body = {};
-    body["event"] = "FollowData"
-    body["author_id"] = this.props.author.user_id
-    actionPayload = {
-      route: 'updateuserinfo',
-      body: body,
-      token: this.props.token //token is mandatory
-    }
-    this.props.onRequestUpdate();
+    if (this.props.author.quotes_props_flag) {
 
+     // console.log('qqqqqqqqqquuuuuuuuuoooooooootes:', this.props.author.user_id)
+      var body = {};
+      body["event"] = "FollowData"
+      body["author_id"] = this.props.author.user_id
+      actionPayload = {
+        route: 'updateuserinfo',
+        body: body,
+        token: this.props.token //token is mandatory
+      }
+      this.props.onRequestUpdate();
+
+    }
   }
 
   postfollow() {
@@ -78,11 +96,11 @@ class AvatarVertical extends React.Component {
     if (this.state.user_present) {
       this.setState({ user_present: false })
       body["follow_unfollow"] = false
-      console.log('inside true if', this.state.user_present)
+     // console.log('inside true if', this.state.user_present)
     } else {
       this.setState({ user_present: true })
       body["follow_unfollow"] = true
-      console.log('inside false if', this.state.user_present)
+     // console.log('inside false if', this.state.user_present)
     }
 
     body["event"] = "FollowUnfollowData"
@@ -92,7 +110,7 @@ class AvatarVertical extends React.Component {
       data: body,
       token: this.props.token //token is mandatory
     }
-    console.log('outside if', actionPayload.data.follow_unfollow)
+   // console.log('outside if', actionPayload.data.follow_unfollow)
     this.props.onRequestPostUpdate();
   }
 

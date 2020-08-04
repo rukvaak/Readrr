@@ -50,7 +50,7 @@ class MyProfile extends React.Component {
                 loading: false
             })
         } else if (nextProps.data.myProfileBlogData) {
-            console.log('blogggggggggggggggggggggg:', nextProps.data.myProfileBlogData.length)
+           // console.log('blogggggggggggggggggggggg:', nextProps.data.myProfileBlogData.length)
             this.setState({
                 mywritings: nextProps.data.myProfileBlogData,
                 loading: false

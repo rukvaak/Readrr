@@ -66,22 +66,23 @@ class BlogPage extends React.Component {
 
   state = {
     blogs: {},
-    author: [],
-    authors: Data,
+    // author: {},
+    // authors: Data,
     reviews: Reviews,
     loading: true
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.data.blogPageData) {
-      //console.log('blogggggggggggggggggggggg:', nextProps.data.blogPageData[0])
-      let user_data= {};
-      user_data['user_id']=(nextProps.data.blogPageData[0].user_id);
-      user_data['user_name']=(nextProps.data.blogPageData[0].user_name);
-      user_data['user_profile_pic']=(nextProps.data.blogPageData[0].user_profile_pic);
+     // console.log('blogggggggggggggggggggggg:', nextProps.data.blogPageData[0])
+      // let user_data= {};
+      // user_data['user_id']=(nextProps.data.blogPageData[0].user_id);
+      // user_data['user_name']=(nextProps.data.blogPageData[0].user_name);
+      // user_data['user_profile_pic']=(nextProps.data.blogPageData[0].user_profile_pic);
+      // user_data['user_props_flag']= true;
      // console.log('uuuuuuuuuuuuuuuuuussssssssss', user_data)
       this.setState({ blogs: nextProps.data.blogPageData[0],
-                      author: user_data,
+                      // author: user_data,
                       loading: false
                     })
     } 
@@ -208,7 +209,10 @@ class BlogPage extends React.Component {
             <Text style={styles.textinner}>
                 Written By
                 </Text>
-              <AvatarVertical author={this.state.author} bottomDivider={false} />
+              <AvatarVertical author={{ user_id: this.state.blogs.user_id, 
+                                        user_profile_pic: this.state.blogs.user_profile_pic , 
+                                        user_name: this.state.blogs.user_name,
+                                        blogs_props_flag: this.state.blogs.user_id ? true : false}}  bottomDivider={false} />
               <Text style={styles.textinner}>
                 Reviews
                 </Text>

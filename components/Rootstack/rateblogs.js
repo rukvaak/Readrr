@@ -34,7 +34,7 @@ class RateBlogs extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.data.RatingAndReview) {
-            console.log('checking rating and review: ', nextProps.data.RatingAndReview)
+           // console.log('checking rating and review: ', nextProps.data.RatingAndReview)
           //("Recieved data")
           this.showToastWithGravity();
           RootNavigation.navigate('Homestack');

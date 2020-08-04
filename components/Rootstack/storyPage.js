@@ -65,7 +65,7 @@ class Storypage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.data.storyPageData) {
-      console.log('blogggggggggggggggggggggg:', nextProps.data.storyPageData[0])
+     // console.log('blogggggggggggggggggggggg:', nextProps.data.storyPageData[0])
       let user_data= {};
       user_data['user_id']=(nextProps.data.storyPageData[0].user_id);
       user_data['user_name']=(nextProps.data.storyPageData[0].user_name);
