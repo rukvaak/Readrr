@@ -44,61 +44,23 @@ class AvatarVertical extends React.Component {
 
 
   componentWillReceiveProps(nextProps) {
-    var body = {};
-    console.log(count++)
-    if(this.state.blogs_props && this.props.author.blogs_props_flag) {
-      //console.log('bbbbbblooggggsssssss:', nextProps)
-      body["event"] = "FollowData"
-      body["author_id"] = nextProps.author.user_id
-      actionPayload = {
-        route: 'updateuserinfo',
-        body: body,
-        token: this.props.token //token is mandatory
-      }
-      this.props.onRequestUpdate();
-      this.setState({ blogs_props: false });
-    } else if (nextProps.data.FollowData) {
-     // console.log('qqqqqqqqqquuuuuuuuuoooooooootes:', nextProps.data.FollowData[0])
+     if  (nextProps.data.FollowUnfollowData) {
+      this.setState({ user_present: false })
+    } else if (nextProps.author.props_flag) {
       this.setState({
-        user_present: nextProps.data.FollowData[0].user_present
+        user_present: nextProps.author.user_followed
       })
-    } else if (nextProps.data.FollowUnfollowData && nextProps.author.quotes_props_flag) {
-      body["event"] = "FollowData"
-      body["author_id"] = this.props.author.user_id
-      actionPayload = {
-        route: 'updateuserinfo',
-        body: body,
-        token: this.props.token //token is mandatory
-      }
-      this.props.onRequestUpdate();
-    }
-  }
-
-  componentWillMount() {
-    if (this.props.author.quotes_props_flag) {
-
-     // console.log('qqqqqqqqqquuuuuuuuuoooooooootes:', this.props.author.user_id)
-      var body = {};
-      body["event"] = "FollowData"
-      body["author_id"] = this.props.author.user_id
-      actionPayload = {
-        route: 'updateuserinfo',
-        body: body,
-        token: this.props.token //token is mandatory
-      }
-      this.props.onRequestUpdate();
-
     }
   }
 
   postfollow() {
     var body = {};
     if (this.state.user_present) {
-      this.setState({ user_present: false })
+     // this.setState({ user_present: false })
       body["follow_unfollow"] = false
      // console.log('inside true if', this.state.user_present)
     } else {
-      this.setState({ user_present: true })
+     // this.setState({ user_present: true })
       body["follow_unfollow"] = true
      // console.log('inside false if', this.state.user_present)
     }

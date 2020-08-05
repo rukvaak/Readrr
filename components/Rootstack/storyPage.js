@@ -12,19 +12,11 @@ import RatingComponent from '../Common/Rating';
 import AvatarVertical from '../Common/AvatarVertical';
 import { default as ImageComponent } from '../Common/ImageComponent';
 
-import { getRequest } from '../../Services/data-service';
+import { getRequest, postRequest } from '../../Services/data-service';
 import { connect } from 'react-redux';
 let actionPayload;
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
-
-const Data = [
-  {
-    id: "2",
-    profile_pic: require('../../assets/LilyAllen.jpg'),
-    name: "Lily Allen"
-  }
-]
 
 const Reviews = [
   {
@@ -57,8 +49,7 @@ class Storypage extends React.Component {
 
   state = {
     stories: [],
-    author: [],
-    authors: Data,
+    user_followed: false,
     reviews: Reviews,
     loading: true
   }
@@ -66,16 +57,13 @@ class Storypage extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.data.storyPageData) {
      // console.log('blogggggggggggggggggggggg:', nextProps.data.storyPageData[0])
-      let user_data= {};
-      user_data['user_id']=(nextProps.data.storyPageData[0].user_id);
-      user_data['user_name']=(nextProps.data.storyPageData[0].user_name);
-      user_data['user_profile_pic']=(nextProps.data.storyPageData[0].user_profile_pic);
-     // console.log('uuuuuuuuuuuuuuuuuussssssssss', user_data)
       this.setState({ stories: nextProps.data.storyPageData[0],
-                      author: user_data,
+                      user_followed: nextProps.data.storyPageData[0].user_followed,
                       loading: false
                     })
-    } 
+    } else if (nextProps.data.FollowUnfollowData) {
+      console.log('entering once')
+  }
   }
 
   componentWillMount() {
@@ -123,6 +111,29 @@ class Storypage extends React.Component {
                                                 blog_story: false });
   }
 
+  postfollow() {
+    var body = {};
+    if (this.state.user_followed) {
+      this.setState({ user_followed: false })
+      body["follow_unfollow"] = false
+      // console.log('inside true if', this.state.user_present)
+    } else {
+      this.setState({ user_followed: true })
+      body["follow_unfollow"] = true
+      // console.log('inside false if', this.state.user_present)
+    }
+
+    body["event"] = "FollowUnfollowData"
+    body["author_id"] = this.state.stories.user_id
+    actionPayload = {
+      route: 'updateuserinfo',
+      data: body,
+      token: this.props.token //token is mandatory
+    }
+    // console.log('outside if', actionPayload.data.follow_unfollow)
+    this.props.onRequestPostUpdate();
+  }
+
   render() {
     if (this.state.loading) {
       return (
@@ -153,7 +164,7 @@ class Storypage extends React.Component {
                     </View>
                     <View>
                       <Text style={{ color: 'gray', textAlign: 'center' }}>
-                      {this.state.stories.story_numberRating+" Reviews"}
+                      {this.state.stories.story_totalRating+" Rating"}
                       </Text>
                     </View>
                   </View>
@@ -166,12 +177,12 @@ class Storypage extends React.Component {
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                       <Icon name="visibility" color='gray' size={25} />
                       <Text style={{ paddingLeft: 5, color: 'gray' }}>
-                        {"3.5K"}
+                      {this.state.stories.story_numberRating}
                       </Text>
                     </View>
                     <View>
                       <Text style={{ color: 'gray', textAlign: 'center' }}>
-                        {"Views"}
+                        {"Reviews"}
                       </Text>
                     </View>
                   </View>
@@ -199,7 +210,27 @@ class Storypage extends React.Component {
             <Text style={styles.textinner}>
                 Written By
                 </Text>
-              <AvatarVertical author={this.state.author} bottomDivider={false} />
+                <Grid style={styles.avatar}>
+                <Col style={{ justifyContent: 'center' }}>
+                  <Avatar rounded size='large' source={{ uri: this.state.stories.user_profile_pic }} />
+                </Col>
+                <Col style={{ justifyContent: 'center' }}>
+                  <Text style={styles.avatartitle}>
+                    {this.state.stories.user_name}
+                  </Text>
+                </Col>
+                <Col style={{ justifyContent: 'center' }}>
+                  <TouchableOpacity
+                    style={styles.avatarButtonStyle}
+                    activeOpacity={0.5}
+                    onPress={() => this.postfollow()}
+                  >
+                    <Text style={styles.avatarButtonText}>
+                      {this.state.user_followed ? 'Following' : 'Follow'}
+                    </Text>
+                  </TouchableOpacity>
+                </Col>
+              </Grid>
               <Text style={styles.textinner}>
                 Reviews
                 </Text>
@@ -341,7 +372,36 @@ const styles = StyleSheet.create({
   imagebackground: {
     flex: 1,
     resizeMode: "cover"
-  }
+  },
+  avatar: {
+    flex: 1,
+    flexDirection: 'row',
+    marginHorizontal: '5%'
+  },
+  avatartitle: {
+    paddingTop: 10,
+    fontSize: 17,
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    alignSelf: 'flex-start',
+    textAlign: 'center'
+  },
+  avatarButtonStyle: {
+    justifyContent: 'center',
+    textAlign: 'center',
+    backgroundColor: '#5abd8c',
+    borderWidth: 0,
+    alignSelf: 'center',
+    borderRadius: 20,
+    width: 100,
+    height: 30
+  },
+  avatarButtonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: 'center',
+    color: '#ffffff'
+  },
 }
 );
 
@@ -356,7 +416,8 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onRequestUpdate: () => dispatch(getRequest(actionPayload))
+    onRequestUpdate: () => dispatch(getRequest(actionPayload)),
+    onRequestPostUpdate: () => dispatch(postRequest(actionPayload))
   };
 };
 

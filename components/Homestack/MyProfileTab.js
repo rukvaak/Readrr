@@ -113,14 +113,14 @@ class MyProfile extends React.Component {
                         ))
                     }
                     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                        <View>
+                        {/* <View>
                             <Text style={styles.text}>
                                 21
                     </Text>
                             <Text style={styles.text}>
                                 Books
                     </Text>
-                        </View>
+                        </View> */}
                         <View>
                             <Text style={styles.text}>
                                 {this.state.reviews.length}
@@ -129,14 +129,14 @@ class MyProfile extends React.Component {
                                 Reviews
                     </Text>
                         </View>
-                        <View>
+                        {/* <View>
                             <Text style={styles.text}>
                                 21
                     </Text>
                             <Text style={styles.text}>
                                 Total Views
                     </Text>
-                        </View>
+                        </View> */}
                         <View>
                             <Text style={styles.text}>
                                 {this.state.following.length}

@@ -7,25 +7,37 @@ import { Text } from 'native-base';
 
 import { default as TopicTitle } from '../../Common/TopicTitle';
 
+import { getRequest, postRequest } from '../../../Services/data-service';
+import { connect } from 'react-redux';
+let actionPayload;
+
 const { width: screenWidth } = Dimensions.get('window');
 
 class FollowAuthors extends React.Component {
-    static navigationOptions = ({ navigation }) => {
-        return {
-            header: () => null
-        }
-    }
+
     constructor(props) {
         super(props);
+        this.postfollow = this.postfollow.bind(this);
     }
 
     state = {
         loading: true
     }
 
-    componentWillReceiveProps() {
-        this.setState({ data: this.props.avatar })
-    }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.data.FollowUnfollowData) {
+            console.log('enter once followauthors')
+        //   var body = {};
+        //   body["event"] = "quoteData"
+        //   actionPayload = {
+        //     route: 'quotes',
+        //     body: body,
+        //     token: this.props.token //token is mandatory
+        //   }
+        //   this.props.onRequestUpdate();
+    
+        }
+      }
 
     async componentDidMount() {
         await Font.loadAsync({
@@ -35,6 +47,29 @@ class FollowAuthors extends React.Component {
         })
         this.setState({ loading: false })
     }
+
+    postfollow(item) {
+        var body = {};
+        if (item.user_followed) {
+          item.user_followed = false
+          body["follow_unfollow"] = false
+          // console.log('inside true if', this.state.user_present)
+        } else {
+          item.user_followed = true
+          body["follow_unfollow"] = true
+          // console.log('inside false if', this.state.user_present)
+        }
+    
+        body["event"] = "FollowUnfollowData"
+        body["author_id"] = item._id
+        actionPayload = {
+          route: 'updateuserinfo',
+          data: body,
+          token: this.props.token //token is mandatory
+        }
+        // console.log('outside if', actionPayload.data.follow_unfollow)
+        this.props.onRequestPostUpdate();
+      }
 
     render() {
         if (this.state.loading) {
@@ -58,10 +93,10 @@ class FollowAuthors extends React.Component {
                                     <TouchableOpacity
                                         style={styles.ButtonStyle}
                                         activeOpacity={0.5}
-                                        onPress={this.login}
+                                        onPress={() => this.postfollow(item)}
                                     >
                                         <Text style={styles.ButtonText}>
-                                            Follow
+                                        {item.user_followed ? 'Following' : 'Follow'}
                               </Text>
                                     </TouchableOpacity>
                                 </View>
@@ -137,4 +172,23 @@ const styles = StyleSheet.create({
 }
 );
 
-export default FollowAuthors;
+const mapStateToProps = (state, props) => {
+    return {
+      store: state.store,
+      loading: true,
+      data: state.items,
+      token: state.token
+    }
+  }
+  
+  const mapDispatchToProps = dispatch => {
+    return {
+      onRequestUpdate: () => dispatch(getRequest(actionPayload)),
+      onRequestPostUpdate: () => dispatch(postRequest(actionPayload))
+    };
+  };
+  
+  export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(FollowAuthors);

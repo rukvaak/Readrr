@@ -12,19 +12,11 @@ import RatingComponent from '../Common/Rating';
 import AvatarVertical from '../Common/AvatarVertical';
 import { default as ImageComponent } from '../Common/ImageComponent';
 
-import { getRequest } from '../../Services/data-service';
+import { getRequest, postRequest } from '../../Services/data-service';
 import { connect } from 'react-redux';
 let actionPayload;
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
-
-const Data = [
-  {
-    id: "2",
-    profile_pic: require('../../assets/LilyAllen.jpg'),
-    name: "Lily Allen"
-  }
-]
 
 const Reviews = [
   {
@@ -62,30 +54,27 @@ class BlogPage extends React.Component {
   constructor(props) {
     super(props);
     this.rendernavigation = this.rendernavigation.bind(this);
+    this.postfollow = this.postfollow.bind(this);
   }
 
   state = {
     blogs: {},
-    // author: {},
-    // authors: Data,
+    user_followed: false,
     reviews: Reviews,
     loading: true
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.data.blogPageData) {
-     // console.log('blogggggggggggggggggggggg:', nextProps.data.blogPageData[0])
-      // let user_data= {};
-      // user_data['user_id']=(nextProps.data.blogPageData[0].user_id);
-      // user_data['user_name']=(nextProps.data.blogPageData[0].user_name);
-      // user_data['user_profile_pic']=(nextProps.data.blogPageData[0].user_profile_pic);
-      // user_data['user_props_flag']= true;
-     // console.log('uuuuuuuuuuuuuuuuuussssssssss', user_data)
-      this.setState({ blogs: nextProps.data.blogPageData[0],
-                      // author: user_data,
-                      loading: false
-                    })
-    } 
+      // console.log('blogggggggggggggggggggggg:', nextProps.data.blogPageData[0])
+      this.setState({
+        blogs: nextProps.data.blogPageData[0],
+        user_followed: nextProps.data.blogPageData[0].user_followed,
+        loading: false
+      })
+    } else if (nextProps.data.FollowUnfollowData) {
+        console.log('entering once')
+    }
   }
 
   componentWillMount() {
@@ -128,16 +117,41 @@ class BlogPage extends React.Component {
   }
 
   rendernavigation() {
-    this.props.navigation.navigate('Webview',{  content: this.state.blogs.blog_content, 
-                                                _id: this.props.route.params.blog_id,
-                                                blog_story: true });
+    this.props.navigation.navigate('Webview', {
+      content: this.state.blogs.blog_content,
+      _id: this.props.route.params.blog_id,
+      blog_story: true
+    });
+  }
+
+  postfollow() {
+    var body = {};
+    if (this.state.user_followed) {
+      this.setState({ user_followed: false })
+      body["follow_unfollow"] = false
+      // console.log('inside true if', this.state.user_present)
+    } else {
+      this.setState({ user_followed: true })
+      body["follow_unfollow"] = true
+      // console.log('inside false if', this.state.user_present)
+    }
+
+    body["event"] = "FollowUnfollowData"
+    body["author_id"] = this.state.blogs.user_id
+    actionPayload = {
+      route: 'updateuserinfo',
+      data: body,
+      token: this.props.token //token is mandatory
+    }
+    // console.log('outside if', actionPayload.data.follow_unfollow)
+    this.props.onRequestPostUpdate();
   }
 
   render() {
     if (this.state.loading) {
       return (
-        <View style={{flex: 1, justifyContent: "center"}}>
-            <ActivityIndicator size="large" />
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <ActivityIndicator size="large" />
         </View>
       );
     }
@@ -145,10 +159,10 @@ class BlogPage extends React.Component {
       <View style={{ flex: 1 }}>
         <ScrollView keyboardShouldPersistTaps="handled">
           <ImageBackground style={styles.imagebackground} source={require('../../assets/Blogpagebackground.png')}>
-            <View style={{paddingTop: 20}}>
+            <View style={{ paddingTop: 20 }}>
               <Text style={styles.textmain}>
                 {this.state.blogs.blog_title}
-                    </Text>
+              </Text>
               {/* <Divider style={styles.Divider} />
               <Text style={styles.textmain}>
                 'An unflinching, unputdownable book'
@@ -159,29 +173,29 @@ class BlogPage extends React.Component {
                 <View style={{ flex: 1, flexDirection: 'column', paddingTop: screenHeight * 0.3 }}>
                   <View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
-                      <RatingComponent rating={this.state.blogs.blog_totalRating}/>
+                      <RatingComponent rating={this.state.blogs.blog_totalRating} />
                     </View>
                     <View>
                       <Text style={{ color: 'gray', textAlign: 'center' }}>
-                      {this.state.blogs.blog_numberRating+" Reviews"}
+                        {this.state.blogs.blog_totalRating + " Rating"}
                       </Text>
                     </View>
                   </View>
                 </View>
                 <View style={styles.item}>
-                  <ImageComponent image={this.state.blogs.blog_image} /> 
+                  <ImageComponent image={this.state.blogs.blog_image} />
                 </View>
                 <View style={{ flex: 1, flexDirection: 'column', paddingTop: screenHeight * 0.3, paddingLeft: 20 }}>
                   <View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                       <Icon name="visibility" color='gray' size={25} />
                       <Text style={{ paddingLeft: 5, color: 'gray' }}>
-                        {"3.5K"}
+                      {this.state.blogs.blog_numberRating}
                       </Text>
                     </View>
                     <View>
                       <Text style={{ color: 'gray', textAlign: 'center' }}>
-                        {"Views"}
+                        {"Reviews"}
                       </Text>
                     </View>
                   </View>
@@ -201,18 +215,40 @@ class BlogPage extends React.Component {
                 >
                   <Text style={{ color: '#ffffff', fontSize: 18, textAlign: 'justify' }}>
                     {this.state.blogs.blog_text}
-                        </Text>
+                  </Text>
                 </ViewMoreText>
               </Card>
             </View>
             <View style={{ paddingTop: 10 }}>
-            <Text style={styles.textinner}>
+              <Text style={styles.textinner}>
                 Written By
                 </Text>
-              <AvatarVertical author={{ user_id: this.state.blogs.user_id, 
+              <Grid style={styles.avatar}>
+                <Col style={{ justifyContent: 'center' }}>
+                  <Avatar rounded size='large' source={{ uri: this.state.blogs.user_profile_pic }} />
+                </Col>
+                <Col style={{ justifyContent: 'center' }}>
+                  <Text style={styles.avatartitle}>
+                    {this.state.blogs.user_name}
+                  </Text>
+                </Col>
+                <Col style={{ justifyContent: 'center' }}>
+                  <TouchableOpacity
+                    style={styles.avatarButtonStyle}
+                    activeOpacity={0.5}
+                    onPress={() => this.postfollow()}
+                  >
+                    <Text style={styles.avatarButtonText}>
+                      {this.state.user_followed ? 'Following' : 'Follow'}
+                    </Text>
+                  </TouchableOpacity>
+                </Col>
+              </Grid>
+              {/* <AvatarVertical author={{ user_id: this.state.blogs.user_id, 
                                         user_profile_pic: this.state.blogs.user_profile_pic , 
                                         user_name: this.state.blogs.user_name,
-                                        blogs_props_flag: this.state.blogs.user_id ? true : false}}  bottomDivider={false} />
+                                        user_followed: this.state.blogs.user_followed,
+                                        props_flag: this.state.blogs.user_id ? true : false}}  bottomDivider={false} /> */}
               <Text style={styles.textinner}>
                 Reviews
                 </Text>
@@ -354,7 +390,36 @@ const styles = StyleSheet.create({
   imagebackground: {
     flex: 1,
     resizeMode: "cover"
-  }
+  },
+  avatar: {
+    flex: 1,
+    flexDirection: 'row',
+    marginHorizontal: '5%'
+  },
+  avatartitle: {
+    paddingTop: 10,
+    fontSize: 17,
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    alignSelf: 'flex-start',
+    textAlign: 'center'
+  },
+  avatarButtonStyle: {
+    justifyContent: 'center',
+    textAlign: 'center',
+    backgroundColor: '#5abd8c',
+    borderWidth: 0,
+    alignSelf: 'center',
+    borderRadius: 20,
+    width: 100,
+    height: 30
+  },
+  avatarButtonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: 'center',
+    color: '#ffffff'
+  },
 }
 );
 
@@ -369,11 +434,12 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onRequestUpdate: () => dispatch(getRequest(actionPayload))
+    onRequestUpdate: () => dispatch(getRequest(actionPayload)),
+    onRequestPostUpdate: () => dispatch(postRequest(actionPayload))
   };
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-) (BlogPage);
+)(BlogPage);

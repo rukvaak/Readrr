@@ -12,7 +12,7 @@ import { default as RatingComponent } from '../../../Common/Rating';
 
 import * as RootNavigation from '../../../../RootNavigation.js';
 
-import { getRequest } from '../../../../Services/data-service';
+import { getRequest, postRequest } from '../../../../Services/data-service';
 import { connect } from 'react-redux';
 const ipconfig = require('../../../../Services/config');;
 let actionPayload;
@@ -29,6 +29,7 @@ class HomePage_Viewall extends React.Component {
     constructor(props) {
         super(props);
         this.renderItem = this.renderItem.bind(this);
+        this.postfollow = this.postfollow.bind(this);
     }
 
     state = {
@@ -61,6 +62,17 @@ class HomePage_Viewall extends React.Component {
             this.setState({
                 data: nextProps.data.YouMayLikeViewAll[0].you_may_like
             })
+        } else if (nextProps.data.FollowUnfollowData) {
+            console.log('enter once followauthors')
+          var body = {};
+          body["event"] = "authorList"
+          actionPayload = {
+            route: 'updateuserinfo',
+            body: body,
+            token: this.props.token //token is mandatory
+          }
+          this.props.onRequestUpdate();
+    
         }
 
     }
@@ -83,7 +95,7 @@ class HomePage_Viewall extends React.Component {
             routename = 'blogs';
         } else if (this.props.route.params.topictitle === "Follow Authors") {
             body["event"] = "authorList"
-            body["limit"] = 0
+            // body["limit"] = 0
             routename = 'updateuserinfo';
         } else if (this.props.route.params.topictitle === "You May Like") {
             body["event"] = "YouMayLikeViewAll";
@@ -96,6 +108,29 @@ class HomePage_Viewall extends React.Component {
         }
         this.props.onRequestUpdate();
     }
+
+    postfollow(item) {
+        var body = {};
+        if (item.user_followed) {
+          item.user_followed = false
+          body["follow_unfollow"] = false
+          // console.log('inside true if', this.state.user_present)
+        } else {
+          item.user_followed = true
+          body["follow_unfollow"] = true
+          // console.log('inside false if', this.state.user_present)
+        }
+    
+        body["event"] = "FollowUnfollowData"
+        body["author_id"] = item._id
+        actionPayload = {
+          route: 'updateuserinfo',
+          data: body,
+          token: this.props.token //token is mandatory
+        }
+        // console.log('outside if', actionPayload.data.follow_unfollow)
+        this.props.onRequestPostUpdate();
+      }
 
 
     async componentDidMount() {
@@ -153,10 +188,10 @@ class HomePage_Viewall extends React.Component {
                             <TouchableOpacity
                                 style={styles.ButtonStyle}
                                 activeOpacity={0.5}
-                                onPress={this.login}
+                                onPress={() => this.postfollow(item)}
                             >
                                 <Text style={styles.ButtonText1}>
-                                    Follow
+                                    {item.user_followed ? 'Following' : 'Follow'}
                               </Text>
                             </TouchableOpacity>
                         </View>
@@ -294,7 +329,8 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onRequestUpdate: () => dispatch(getRequest(actionPayload))
+        onRequestUpdate: () => dispatch(getRequest(actionPayload)),
+        onRequestPostUpdate: () => dispatch(postRequest(actionPayload))
     };
 };
 
